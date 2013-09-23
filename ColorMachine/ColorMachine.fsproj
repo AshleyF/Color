@@ -7,8 +7,8 @@
     <SchemaVersion>2.0</SchemaVersion>
     <ProjectGuid>220e0fc3-f9e1-495c-9074-15dfdbacd7ae</ProjectGuid>
     <OutputType>Exe</OutputType>
-    <RootNamespace>VM</RootNamespace>
-    <AssemblyName>VM</AssemblyName>
+    <RootNamespace>Machine</RootNamespace>
+    <AssemblyName>Machine</AssemblyName>
     <TargetFrameworkVersion>v4.5</TargetFrameworkVersion>
     <Name>ColorMachine</Name>
   </PropertyGroup>
@@ -21,7 +21,7 @@
     <DefineConstants>DEBUG;TRACE</DefineConstants>
     <WarningLevel>3</WarningLevel>
     <PlatformTarget>AnyCPU</PlatformTarget>
-    <DocumentationFile>bin\Debug\VM.XML</DocumentationFile>
+    <DocumentationFile>bin\Debug\Machine.XML</DocumentationFile>
     <Prefer32Bit>true</Prefer32Bit>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
@@ -32,7 +32,7 @@
     <DefineConstants>TRACE</DefineConstants>
     <WarningLevel>3</WarningLevel>
     <PlatformTarget>AnyCPU</PlatformTarget>
-    <DocumentationFile>bin\Release\VM.XML</DocumentationFile>
+    <DocumentationFile>bin\Release\Machine.XML</DocumentationFile>
     <Prefer32Bit>true</Prefer32Bit>
   </PropertyGroup>
   <PropertyGroup>
