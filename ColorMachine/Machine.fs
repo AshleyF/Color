@@ -89,23 +89,12 @@ let blockIO =
     let reader = ref (new BinaryReader(file))
     let writer = ref (new BinaryWriter(file))
     let select i =
-        (!reader).Close();
-        (!writer).Close()
+        (!reader).Close(); (!writer).Close()
         let file = block i
         reader := new BinaryReader(file)
         writer := new BinaryWriter(file)
-    let input () =
-        let w = (!reader).ReadInt32()
-        if BitConverter.IsLittleEndian then
-            let bytes = BitConverter.GetBytes(w)
-            Array.Reverse bytes
-            BitConverter.ToInt32(bytes, 0)
-        else w
-    let output (v : int32) =
-        let bytes = BitConverter.GetBytes(v)
-        if BitConverter.IsLittleEndian then Array.Reverse bytes
-        (!writer).Write(bytes)
-        (!writer).Flush()
+    let input () = (!reader).ReadInt32()
+    let output (v : int32) = (!writer).Write(v); (!writer).Flush()
     select, input, output
 
 let blockSelect, blockInput, blockOutput = blockIO
