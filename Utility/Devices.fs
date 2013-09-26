@@ -12,8 +12,10 @@ let consoleOutput x =
     | 2 -> Console.ForegroundColor <- enum (x &&& 0xf)
     | 3 -> Console.BackgroundColor <- enum (x &&& 0xf)
 
+let blockFile = sprintf @"..\..\..\Blocks\%i.blk"
+
 let blockIO =
-    let block b = File.Open(sprintf @"..\..\..\Source\%i.blk" b, FileMode.OpenOrCreate, FileAccess.ReadWrite, FileShare.Read)
+    let block b = File.Open(blockFile b, FileMode.OpenOrCreate, FileAccess.ReadWrite, FileShare.Read)
     let file = block 0
     let reader = ref (new BinaryReader(file))
     let writer = ref (new BinaryWriter(file))

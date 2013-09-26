@@ -73,5 +73,5 @@
 
 open Devices
 
-let machine = new Machine([|blockInput; consoleInput|], [|consoleOutput; blockSelect; blockOutput|])
-machine.Run()
+(new Machine([|blockInput; consoleInput|], [|consoleOutput; blockSelect; blockOutput|])).Run()
+System.Console.ReadLine() |> ignore
