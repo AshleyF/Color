@@ -3,7 +3,7 @@
 open System
 open System.IO
 
-let consoleInput () = Console.ReadKey(true).Key |> int
+let consoleInput () = if Console.KeyAvailable then Console.ReadKey(true).Key |> int else 0
 
 let consoleOutput x =
     match x >>> 24 with

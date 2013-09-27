@@ -14,6 +14,7 @@ type Tagged =
     | Execute     of Kind
     | Compile     of Kind
     | Comment     of string
+    | Format      of string
     | Instruction of byte
 
 let serialize =
@@ -29,6 +30,7 @@ let serialize =
         | Execute (Word w)   ->  0x22 :: str w
         | Compile (Number n) -> [0x23; n]
         | Compile (Word w)   ->  0x24 :: str w
+        | Format f           ->  0xfe :: str f
         | Comment c          ->  0xff :: str c
         | Instruction i      -> [int i]
     List.map serialize' >> List.concat
@@ -50,6 +52,7 @@ let deserialize =
         | 0x22 :: t -> str (Word   >> Execute) t
         | 0x23 :: t -> num (Number >> Compile) t
         | 0x24 :: t -> str (Word   >> Compile) t
+        | 0xfe :: t -> str Format t
         | 0xff :: t -> str Comment t
         | i    :: t -> deserialize' (Instruction (byte i) :: code) t
         | [] -> List.rev code
@@ -85,7 +88,7 @@ let instructions =
 let instName = Map.ofList instructions
 let nameInst = instructions |> List.map (fun (i, s) -> s, i) |> Map.ofList
 
-type Color = Gray | Red | Green | Yellow | White | Black
+type Color = Gray | Red | Green | Yellow | White | Blue | Black
 type Token = Color * string
 
 let tagged2token = function
@@ -95,6 +98,7 @@ let tagged2token = function
     | Compile (Number n) -> Green, num2str n
     | Compile (Word w)   -> Green, w
     | Comment c          -> White, c
+    | Format f           -> Blue, f
     | Instruction i      -> Gray, instName.[i]
 
 let token2tagged = function
@@ -107,8 +111,9 @@ let token2tagged = function
         match str2num s with
         | Some n -> Compile (Number n)
         | None -> Compile (Word s)
+    | Blue,  f -> Format f
     | White, s -> Comment s
-    | Gray, s -> Instruction (nameInst.[s])
+    | Gray,  s -> Instruction (nameInst.[s])
 
 let loadTokens = loadTagged >> List.map tagged2token
 let saveTokens b = List.map token2tagged >> saveTagged b

@@ -42,7 +42,8 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Devices.fs" />
-    <Compile Include="SerDes.fs" />
+    <Compile Include="Serdes.fs" />
+    <Compile Include="Console.fs" />
   </ItemGroup>
   <PropertyGroup>
     <MinimumVisualStudioVersion Condition="'$(MinimumVisualStudioVersion)' == ''">11</MinimumVisualStudioVersion>

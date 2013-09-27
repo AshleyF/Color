@@ -71,7 +71,7 @@ let assemble (source : Tagged list) =
             match asm.[cell] with
             | Some a ->
                 let addr' = addr - (!origin).Value
-                if final then asm.[cell] <- Some { a with Value = a.Value ||| addr'; Comment = (if name.Length > 0 then sprintf "R%s" name else sprintf "B%04x" addr') :: a.Comment }
+                if final then asm.[cell] <- Some { a with Value = a.Value ||| addr'; Comment = (if name.Length > 0 then sprintf "R%s" name else sprintf "A%04x" addr') :: a.Comment }
                 align ()
             | None -> failwith "Address in unpacked cell."
         else error "INVALID ADDRESS"
@@ -185,8 +185,8 @@ let assemble (source : Tagged list) =
                     | 'R' -> print 1 ConsoleColor.Red
                     | 'G' -> print 1 ConsoleColor.Green
                     | 'Y' -> print 1 ConsoleColor.Yellow
-                    | 'B' -> print 1 ConsoleColor.Gray
-                    |  _  -> print 0 ConsoleColor.Gray
+                    | 'A' -> print 1 ConsoleColor.DarkGray
+                    |  _  -> print 0 ConsoleColor.DarkGray
                 comment |> List.rev |> List.iter printCommentWord
                 Console.WriteLine()
             | None -> ()
@@ -227,7 +227,7 @@ let rec test () =
 //    let last = (new FileInfo(file)).LastWriteTime
 //    while (new FileInfo(file)).LastWriteTime = last do
 //        Thread.Sleep(100)
-    Console.ReadLine()
+    Console.ReadLine() |> ignore
     Console.Clear()
     test ()
 

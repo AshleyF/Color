@@ -52,7 +52,7 @@
     <Reference Include="System.Numerics" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\Devices\Utility.fsproj">
+    <ProjectReference Include="..\Utility\Utility.fsproj">
       <Name>Utility</Name>
       <Project>{8d0fb50b-10b8-40bb-8115-f060f081f345}</Project>
       <Private>True</Private>
