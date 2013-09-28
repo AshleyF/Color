@@ -164,6 +164,11 @@ let rec edit state key =
     let toWord w = (function Some (_, w') -> w <> w' | _ -> true)
     let find dir s = currentApply (fun (_, w) -> let s' = dir (toWord w) s in if s'.Current = s.Current then s' else consoleBeep (); s) s
     let toggle v s = v := not !v; s
+    let newline s = { s with Current = Some (Blue, "cr") } |> next |> tag Red
+    let openLine s =
+        let toEnd = (function Some (Blue, "cr") -> false | _ -> true)
+        let s' = right toEnd state
+        (if s'.Current = Some (Blue, "cr") then insert else append) s' |> newline
     let validate s =
         let validate' = function
             | _, "" -> s
@@ -197,6 +202,7 @@ let rec edit state key =
         | Normal, 'l' | Normal, 'w' | Normal, ' ' -> right once state
         | Normal, 'k' -> left toDef state
         | Normal, 'j' -> right toDef state
+        | Normal, 'o' -> openLine state
         | Normal, 'x' -> delete state
         | Normal, 'X' -> deleteBack state
         | Normal, 'y' -> yank state
@@ -211,7 +217,7 @@ let rec edit state key =
         | Insert, '\b' -> del state
         | Normal, k when int k = 18 (* ctrl-R *) -> redo state
         | Insert, k when int k = 27 (* esc *) -> validate state |> normal
-        | Insert, k when int k = 13 (* enter *) -> validate state |> next |> (fun s -> { s with Current = Some (Blue, "cr") }) |> next |> tag Red
+        | Insert, k when int k = 13 (* enter *) -> validate state |> next |> newline
         | Insert, k when int k = 9  (* tab *)   -> validate state |> next |> tag Blue |> input '.' |> next |> tag Green
         | Insert, k when Char.IsLower(k) || Char.IsDigit(k) || Char.IsSymbol(k) || Char.IsPunctuation(k) -> input k state |> validate
         |      _, k -> failwith (sprintf "Invalid key (%i)." (int k))

@@ -227,6 +227,7 @@ let changed (a : FileSystemEventArgs) =
         Int32.Parse(Path.GetFileNameWithoutExtension(a.FullPath)) |> loadTagged |> assemble
     with ex ->
         blockInputSelect -1
+        Console.ForegroundColor <- ConsoleColor.Magenta
         printfn "Error: %s" ex.Message
 let watcher = new FileSystemWatcher(Path.GetDirectoryName(blockFile 0))
 watcher.Changed.Add(changed)

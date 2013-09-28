@@ -8,13 +8,14 @@ open Serdes
 let width, height = 80, 40
 
 let color = function
-    | Red    -> ConsoleColor.Red
-    | Yellow -> ConsoleColor.Yellow
-    | Green  -> ConsoleColor.Green
-    | White  -> ConsoleColor.White
-    | Blue   -> ConsoleColor.DarkBlue
-    | Gray   -> ConsoleColor.DarkGray
-    | Black  -> ConsoleColor.Black
+    | Red     -> ConsoleColor.Red
+    | Yellow  -> ConsoleColor.Yellow
+    | Green   -> ConsoleColor.Green
+    | White   -> ConsoleColor.White
+    | Blue    -> ConsoleColor.DarkBlue
+    | Gray    -> ConsoleColor.DarkGray
+    | Magenta -> ConsoleColor.Magenta
+    | Black   -> ConsoleColor.Black
 
 let empty () = Array2D.create width height (White, Black, ' ')
 let current = ref (empty ())
@@ -41,7 +42,7 @@ let consoleWrite f b (s : string) =
 
 let consoleWriteStatus (s : string) =
     x := 0; y := height - 3 // Console.SetCursorPosition(0, height - 3)
-    consoleWrite White Black (s.Substring(0, min (s.Length) (width - 1)))
+    consoleWrite Magenta Black (s.Substring(0, min (s.Length) (width - 1)))
 
 let consoleRefresh () =
     let move = ref true

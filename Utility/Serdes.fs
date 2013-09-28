@@ -91,7 +91,7 @@ let instructions =
 let instName = Map.ofList instructions
 let nameInst = instructions |> List.map (fun (i, s) -> s, i) |> Map.ofList
 
-type Color = Gray | Red | Green | Yellow | White | Blue | Black
+type Color = Gray | Red | Green | Yellow | White | Blue | Magenta | Black
 type Token = Color * string
 
 let tagged2token = function
