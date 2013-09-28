@@ -1,8 +1,8 @@
 ﻿open System
+open System.IO
 open System.Threading
+open Devices
 open Serdes
-
-let bootBlock = 0
 
 type Cell = {
     Name      : string
@@ -191,7 +191,7 @@ let assemble (source : Tagged list) =
                 Console.WriteLine()
             | None -> ()
         Array.iteri print' asm
-    let save () = List.ofArray asm |> List.filter (Option.isSome) |> List.map (function Some { Value = v } -> v | None -> failwith "Should have been filtered") |> saveRaw bootBlock
+    let save () = List.ofArray asm |> List.filter (Option.isSome) |> List.map (function Some { Value = v } -> v | None -> failwith "Should have been filtered") |> saveRaw false 0
     for t in source do
         match t with
         | Define n           -> def n
@@ -215,23 +215,26 @@ let assemble (source : Tagged list) =
             | _ -> error (sprintf "UNKNOWN IMMEDIATE WORD (%s)" w)
         | Compile (Number n) -> literal n
         | Compile (Word w)   -> call w
-        | Comment c          -> ()
+        | Comment _ | Format _ -> ()
         | Instruction i      -> pack i
     print ()
     save ()
 
-let rec test () =
-    let code = loadTagged bootBlock
-    assemble code
-//    let file = blockFile bootBlock
-//    let last = (new FileInfo(file)).LastWriteTime
-//    while (new FileInfo(file)).LastWriteTime = last do
-//        Thread.Sleep(100)
-    Console.ReadLine() |> ignore
-    Console.Clear()
-    test ()
-
-test ()
+let changed (a : FileSystemEventArgs) =
+    try
+        Thread.Sleep(100)
+        Console.Clear()
+        Int32.Parse(Path.GetFileNameWithoutExtension(a.FullPath)) |> loadTagged |> assemble
+    with ex ->
+        blockInputSelect -1
+        printfn "Error: %s" ex.Message
+let watcher = new FileSystemWatcher(Path.GetDirectoryName(blockFile 0))
+watcher.Changed.Add(changed)
+watcher.Created.Add(changed)
+let rec watch () =
+    watcher.WaitForChanged(WatcherChangeTypes.Changed ||| WatcherChangeTypes.Created) |> ignore
+    watch ()
+watch ()
 
 // TODO: is jump/call/next/if/-if necessary (e.g. unext for decrement)
 // TODO: better pre-packing address size checks

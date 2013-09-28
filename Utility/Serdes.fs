@@ -58,17 +58,20 @@ let deserialize =
         | [] -> List.rev code
     deserialize' []
 
-let saveRaw b (r : int list) =
-    blockSelect b
-    blockOutput (r.Length)
+let saveRaw len b (r : int list) =
+    blockOutputSelect b
+    if len then blockOutput (r.Length)
     List.iter blockOutput r
+    blockOutputSelect -1 // close
 
 let loadRaw b =
-    blockSelect b
+    blockInputSelect b
     let len = try blockInput () with _ -> 0
-    [for _ in 0 .. len - 1 do yield blockInput ()]
+    let raw = [for _ in 0 .. len - 1 do yield blockInput ()]
+    blockInputSelect -1 // close
+    raw
 
-let saveTagged b = serialize >> saveRaw b
+let saveTagged b = serialize >> saveRaw true b
 
 let loadTagged = loadRaw >> deserialize
 

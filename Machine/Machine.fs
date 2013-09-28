@@ -1,6 +1,7 @@
 ﻿type Machine(input : (unit -> int) array, output : (int -> unit) array) =
     let high = 0x8000
-    let mutable p, i, slot, t, s, si, r, ri, a, b = high, 0, 4, 0, 0, 0, 0, 0, 0, high
+    let consoleIO = high + 1
+    let mutable p, i, slot, t, s, si, r, ri, a, b = high, 0, 4, 0, 0, 0, 0, 0, 0, consoleIO
 
     let stk, rtn = Array.zeroCreate 8, Array.zeroCreate 8
     let move x d = (x + d) &&& 0b111
@@ -73,5 +74,5 @@
 
 open Devices
 
-(new Machine([|blockInput; consoleInput|], [|consoleOutput; blockSelect; blockOutput|])).Run()
+(new Machine([|blockInput; consoleInputBlocking; consoleInputNonBlocking|], [|blockOutput; consoleOutput; blockInputSelect; blockOutputSelect|])).Run()
 System.Console.ReadLine() |> ignore

@@ -3,7 +3,8 @@
 open System
 open System.IO
 
-let consoleInput () = if Console.KeyAvailable then Console.ReadKey(true).Key |> int else 0
+let consoleInputBlocking () = Console.ReadKey(true).Key |> int
+let consoleInputNonBlocking () = if Console.KeyAvailable then consoleInputBlocking () else 0
 
 let consoleOutput x =
     match x >>> 24 with
@@ -15,17 +16,18 @@ let consoleOutput x =
 let blockFile = sprintf @"..\..\..\Blocks\%i.blk"
 
 let blockIO =
-    let block b = File.Open(blockFile b, FileMode.OpenOrCreate, FileAccess.ReadWrite, FileShare.Read)
-    let file = block 0
-    let reader = ref (new BinaryReader(file))
-    let writer = ref (new BinaryWriter(file))
-    let select i =
-        (!reader).Close(); (!writer).Close()
-        let file = block i
-        reader := new BinaryReader(file)
-        writer := new BinaryWriter(file)
-    let input () = (!reader).ReadInt32()
-    let output (v : int32) = (!writer).Write(v); (!writer).Flush()
-    select, input, output
+    let block m b = File.Open(blockFile b, m, FileAccess.ReadWrite, FileShare.Read)
+    let (reader : BinaryReader option ref) = ref None
+    let (writer : BinaryWriter option ref) = ref None
+    let selectIn i =
+        match !reader with Some r -> r.Close() | None -> ()
+        if i >= 0 then reader := new BinaryReader(block FileMode.OpenOrCreate i) |> Some
+    selectIn 0
+    let selectOut i =
+        match !writer with Some w -> w.Close() | None -> ()
+        if i >= 0 then writer := new BinaryWriter(block FileMode.Create i) |> Some
+    let input () = match !reader with Some r -> r.ReadInt32() | None -> failwith "No input block selected."
+    let output (v : int32) = match !writer with Some w -> w.Write(v); w.Flush() | None -> failwith "No output block selected."
+    selectIn, input, selectOut, output
 
-let blockSelect, blockInput, blockOutput = blockIO
+let blockInputSelect, blockInput, blockOutputSelect, blockOutput = blockIO

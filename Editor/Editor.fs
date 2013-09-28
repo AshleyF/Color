@@ -46,21 +46,23 @@ let render state =
 
 let rec edit state key =
     let checkpoint s =
-        let same u = s.Mode = u.Mode && s.Before = u.Before && s.Current = u.Current && s.After = u.After
-        let s' = { s with Mode = Normal; Message = "" }
-        match s.Undo with
-        | Some u -> if same u then s else { s with Undo = Some s' }
-        | None -> { s with Undo = Some s' }
+        currentApply (fun (_, w) ->
+            if w.Length > 0 then
+                let same u = s.Mode = u.Mode && s.Before = u.Before && s.Current = u.Current && s.After = u.After
+                let s' = { s with Mode = Normal; Message = "" }
+                match s.Undo with
+                | Some u -> if same u then s else { s with Undo = Some s' }
+                | None -> { s with Undo = Some s' }
+            else s) s
     let message s m = { s with Message = m }
     let load b s =
         match loadTokens b with
         | c :: a -> { checkpoint s with Before = []; Current = Some c; After = a; Block = b } |> message <| sprintf "Loaded block %i " b
         | [] -> { checkpoint s with Before = []; Current = None; After = []; Block = b } |> message <| sprintf "Loaded empty block %i" b
-    let saveAs b s =
+    let save s =
         let tokens = (state.Before |> List.rev) @ (match s.Current with Some c -> [c] | None -> []) @ s.After
-        saveTokens b tokens
-        sprintf "Saved block %i" b |> message s
-    let save s = saveAs s.Block s
+        saveTokens s.Block tokens
+        sprintf "Saved block %i" s.Block |> message s
     let move b c a =
         match b, c with
         | b :: bs, Some c -> bs, Some b, c :: a
@@ -105,6 +107,11 @@ let rec edit state key =
     let append s =
         let b = match s.Current with Some c -> c :: s.Before | None -> s.Before
         { checkpoint s with Before = b; Current = nextColor s.Current; Mode = Insert }
+    let fix s =
+        let good (c, (w : string)) = w.Length > 0
+        let fix' = List.filter good
+        let goodOpt = function Some g -> good g | None -> true
+        { s with Before = fix' s.Before; After = fix' s.After; Current = if goodOpt s.Current then s.Current else None }
     let normal s =
         match s.Current with
         | None | Some (_, "") -> match s.Undo with Some u -> u | None -> s
@@ -159,6 +166,7 @@ let rec edit state key =
     let toggle v s = v := not !v; s
     let validate s =
         let validate' = function
+            | _, "" -> s
             | Gray, w -> match Map.tryFind w nameInst with | Some _ -> s | None -> failwith "Invalid instruction."
             | Blue, "cr" | Blue, "." -> s
             | Blue, _ -> failwith "Invalid format word."
@@ -166,16 +174,14 @@ let rec edit state key =
         currentApply validate' s
     try
         match state.Mode, key with
-        |      _, 'R' -> tag Red    state
-        |      _, 'Y' -> tag Yellow state
-        |      _, 'G' -> tag Green  state
-        | Normal, 'W' -> tag White  state |> right once
-        | Insert, 'W' -> tag White  state
-        | Insert, 'A' -> tag Gray   state
-        |      _, 'A' -> tag Gray   state |> validate
-        |      _, 'B' -> tag Blue   state |> validate
-        |      _, 'F' -> toggle showFormatting state
-        |      _, 'C' -> toggle showComments state
+        | _, 'R' -> tag Red    state
+        | _, 'Y' -> tag Yellow state
+        | _, 'G' -> tag Green  state
+        | _, 'W' -> tag White  state |> if state.Mode = Insert then id else right once
+        | _, 'A' -> tag Gray   state |> if state.Mode = Insert then id else validate
+        | _, 'B' -> tag Blue   state |> validate
+        | Normal, 'f' -> toggle showFormatting state
+        | Normal, 'c' -> toggle showComments state
         | Normal, '1' -> load 1 state
         | Normal, '2' -> load 2 state
         | Normal, '3' -> load 3 state
@@ -188,7 +194,7 @@ let rec edit state key =
         | Normal, '0' -> load 10 state
         | Normal, 's' -> save state
         | Normal, 'h' | Normal, 'b' -> left once state
-        | Normal, 'l' | Normal, 'w' -> right once state
+        | Normal, 'l' | Normal, 'w' | Normal, ' ' -> right once state
         | Normal, 'k' -> left toDef state
         | Normal, 'j' -> right toDef state
         | Normal, 'x' -> delete state
@@ -205,9 +211,9 @@ let rec edit state key =
         | Insert, '\b' -> del state
         | Normal, k when int k = 18 (* ctrl-R *) -> redo state
         | Insert, k when int k = 27 (* esc *) -> validate state |> normal
-        | Insert, k when int k = 13 (* enter *) -> validate state |> next |> tag Blue |> input 'c' |> input 'r' |> next |> tag Red
+        | Insert, k when int k = 13 (* enter *) -> validate state |> next |> (fun s -> { s with Current = Some (Blue, "cr") }) |> next |> tag Red
         | Insert, k when int k = 9  (* tab *)   -> validate state |> next |> tag Blue |> input '.' |> next |> tag Green
-        | Insert, k when Char.IsLower(k) || Char.IsDigit(k) || Char.IsPunctuation(k) -> input k state |> validate
+        | Insert, k when Char.IsLower(k) || Char.IsDigit(k) || Char.IsSymbol(k) || Char.IsPunctuation(k) -> input k state |> validate
         |      _, k -> failwith (sprintf "Invalid key (%i)." (int k))
     with ex -> consoleBeep (); message state ex.Message
 
