@@ -100,7 +100,7 @@ let rec edit state key =
         | _ -> s
     let putBefore s = put (fun c s -> { s with Before = c :: s.Before }) s
     let putAfter  s = put (fun c s -> { s with After  = c :: s.After  }) s
-    let nextColor = function Some (Red, _) -> Some (Green, "") | Some (t, _) -> Some (t, "") | None -> Some (Red, "")
+    let nextColor = function Some (Red, _) | Some (Blue, _) -> Some (Green, "") | Some (t, _) -> Some (t, "") | None -> Some (Red, "")
     let insert s =
         let a = match s.Current with Some c -> c :: s.After | None -> s.After
         { checkpoint s with After = a; Current = nextColor s.Current; Mode = Insert }
@@ -215,8 +215,9 @@ let rec edit state key =
         | Normal, '#' -> find left state
         | Insert, ' ' -> validate state |> next
         | Insert, '\b' -> del state
+        |      _, k when int k = 0 -> state // ignore
+        |      _, k when int k = 27 (* esc *) -> validate state |> normal
         | Normal, k when int k = 18 (* ctrl-R *) -> redo state
-        | Insert, k when int k = 27 (* esc *) -> validate state |> normal
         | Insert, k when int k = 13 (* enter *) -> validate state |> next |> newline
         | Insert, k when int k = 9  (* tab *)   -> validate state |> next |> tag Blue |> input '.' |> next |> tag Green
         | Insert, k when Char.IsLower(k) || Char.IsDigit(k) || Char.IsSymbol(k) || Char.IsPunctuation(k) -> input k state |> validate
