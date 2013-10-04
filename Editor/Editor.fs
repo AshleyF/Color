@@ -121,6 +121,7 @@ let rec edit state key =
             | Gray, "an"   -> "and"
             | Gray, "b"    -> "b!"
             | Gray, "b!e"  -> "begin"
+            | Gray, "b!r"  -> "break"
             | Gray, "c"    -> "call"
             | Gray, "d"    -> "dup"
             | Gray, "dupr" -> "drop"

@@ -25,11 +25,11 @@ let serialize =
         let chars = (Seq.map (int >> pack 0xff) >> List.ofSeq) s // char and ff
         header :: chars
     let serialize' = function
-        | Define n           ->  0x20 :: str n
-        | Execute (Number n) -> [0x21; n]
-        | Execute (Word w)   ->  0x22 :: str w
-        | Compile (Number n) -> [0x23; n]
-        | Compile (Word w)   ->  0x24 :: str w
+        | Define n           ->  0x40 :: str n
+        | Execute (Number n) -> [0x41; n]
+        | Execute (Word w)   ->  0x42 :: str w
+        | Compile (Number n) -> [0x43; n]
+        | Compile (Word w)   ->  0x44 :: str w
         | Format f           ->  0xfe :: str f
         | Comment c          ->  0xff :: str c
         | Instruction i      -> [int i]
@@ -47,11 +47,11 @@ let deserialize =
                 deserialize' (tag w :: code) t'
         let num tag = function n :: t -> deserialize' (tag n :: code) t
         function
-        | 0x20 :: t -> str Define t
-        | 0x21 :: t -> num (Number >> Execute) t
-        | 0x22 :: t -> str (Word   >> Execute) t
-        | 0x23 :: t -> num (Number >> Compile) t
-        | 0x24 :: t -> str (Word   >> Compile) t
+        | 0x40 :: t -> str Define t
+        | 0x41 :: t -> num (Number >> Execute) t
+        | 0x42 :: t -> str (Word   >> Execute) t
+        | 0x43 :: t -> num (Number >> Compile) t
+        | 0x44 :: t -> str (Word   >> Compile) t
         | 0xfe :: t -> str Format t
         | 0xff :: t -> str Comment t
         | i    :: t -> deserialize' (Instruction (byte i) :: code) t
@@ -85,7 +85,8 @@ let str2num (s : string) =
 
 let instructions =
     [";"; "ex"; "jump"; "call"; "unext"; "next"; "if"; "-if"; "@p"; "@+"; "@b"; "@"; "!p"; "!+"; "!b"; "!"
-     "+*"; "2*"; "2/"; "-"; "+"; "and"; "or"; "drop"; "dup"; "pop"; "over"; "a"; "."; "push"; "b!"; "a!"]
+     "+*"; "2*"; "2/"; "-"; "+"; "and"; "or"; "drop"; "dup"; "pop"; "over"; "a"; "."; "push"; "b!"; "a!"
+     "break"]
     |> List.mapi (fun i n -> byte i, n)
 
 let instName = Map.ofList instructions
