@@ -19,6 +19,11 @@ let assemble (source : Tagged list) =
     let lastIp = ref 0
     let lastSlot = ref 0
     let stack = ref []
+    let push v = stack := v :: !stack
+    let pop () =
+        match !stack with
+        | v :: stack' -> stack := stack'; v
+        | [] -> failwith "STACK UNDERFLOW"
     let (asm : Cell option array) = Array.create 1024 None
     let get () =
         match asm.[!ip] with
@@ -44,6 +49,11 @@ let assemble (source : Tagged list) =
         if !slot <> 3 then
             while !slot <> -1 do pack 0x1cuy // nop
             align ()
+    let isValid addr slot =
+        match !origin with
+        | Some _ -> slot > 0 // TODO: real address range check
+        | None -> false
+    let padAsNeeded addr = if not (isValid addr !slot) then pad ()
     let data n =
         let s = sprintf "%x" n
         let s' = if Char.IsDigit s.[0] then sprintf "G%s" s else sprintf "G0%s" s
@@ -62,10 +72,6 @@ let assemble (source : Tagged list) =
         match !origin with
         | None -> origin := Some !ip
         | Some _ -> () // already set
-    let isValid addr slot =
-        match !origin with
-        | Some _ -> slot > 0 // TODO: real address range check
-        | None -> false
     let address cell addr (name : string) final =
         if isValid addr (!slot + 1) then
             match asm.[cell] with
@@ -76,30 +82,18 @@ let assemble (source : Tagged list) =
             | None -> failwith "Address in unpacked cell."
         else error "INVALID ADDRESS"
     let addrMacro () =
-        match !stack with
-        | a :: stack' ->
-            match !origin with
-            | Some orig ->
-                address !ip (a + orig) "" true
-                stack := stack'
-            | None -> failwith "Address in unpacked cell."
-        | [] -> error "STACK UNDERFLOW"
-    let dataMacro () =
-        match !stack with
-        | n :: stack' -> data n
-        | [] -> error "STACK UNDERFLOW"
+        match !origin with
+        | Some orig -> address !ip (pop () + orig) "" true
+        | None -> failwith "Address in unpacked cell."
+    let dataMacro () = pop () |> data
     let endMacro () =
-        match !stack with
-        | a :: stack' ->
-            if not (isValid !ip !slot) then pad ()
-            pack 0x02uy // jump
-            address !ip a "" true
-            stack := stack'
-        | [] -> error "STACK UNDERFLOW"
+        padAsNeeded !ip 
+        pack 0x02uy // jump
+        address !ip (pop ()) "" true
     let call s =
         match Map.tryFind s !dict with
         | Some addr ->
-            if not (isValid addr !slot) then pad ()
+            padAsNeeded addr
             pack 0x03uy // call
             address !ip addr s true
         | None -> error (sprintf "INVALID CALL (%s)" s)
@@ -117,36 +111,25 @@ let assemble (source : Tagged list) =
         | None -> failwith "Invalid lastIp."
     let beginMacro () =
         pad ()
-        stack := !ip :: !stack
+        push !ip
         comment "Ybegin"
     let forMacro () =
         comment "Yfor"
         pack 0x1duy (* push *)
-        pad (); stack := !ip :: !stack // beginMacro ()
+        pad (); push !ip // beginMacro ()
     let nextMacro () =
-        match !stack with
-        | a :: stack' ->
-            if a = !ip && !slot >= 0 then
-                pack 0x04uy // unext *) else 0x05uy (* next *))
-            else
-                if not (isValid a !slot) then pad ()
-                pack 0x05uy // next
-                address !ip a "" true
-            stack := stack'
-        | [] -> error "STACK UNDERFLOW"
+        let a = pop ()
+        if a = !ip && !slot >= 0 then pack 0x04uy // unext
+        else padAsNeeded a; pack 0x05uy (* next *); address !ip a "" true
     let ifMacro code =
-        if not (isValid !ip !slot) then pad ()
+        padAsNeeded !ip
         pack code // if/-if
-        stack := !ip :: !stack
+        push !ip
         align () //address !ip 0 "" false // to be patched by 'then'
     let thenMacro () =
-        match !stack with
-        | a :: stack' ->
-            pad ()
-            address a !ip "" true
-            stack := stack'
-            comment "Ythen"
-        | [] -> error "STACK UNDERFLOW"
+        pad ()
+        address (pop ()) !ip "" true
+        comment "Ythen"
     let loadMacro () =
         comment "Yload"
         literal 0
@@ -195,7 +178,7 @@ let assemble (source : Tagged list) =
     for t in source do
         match t with
         | Define n           -> def n
-        | Execute (Number n) -> stack := n :: !stack
+        | Execute (Number n) -> push n
         | Execute (Word w) ->
             match w with
             | "load"  -> loadMacro ()
