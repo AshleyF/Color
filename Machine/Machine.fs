@@ -1,7 +1,6 @@
-﻿type Machine(input : (unit -> int) array, output : (int -> unit) array) =
+﻿type Machine(input : (unit -> int) array, output : (int -> unit) array, hook, extention) =
     let high = 0x8000
-    let consoleIO = high + 1
-    let mutable p, i, slot, t, s, si, r, ri, a, b = high, 0, 4, 0, 0, 0, 0, 0, 0, consoleIO
+    let mutable p, i, slot, t, s, si, r, ri, a, b = high, 0, 4, 0, 0, 0, 0, 0, 0, high
 
     let stk, rtn = Array.zeroCreate 8, Array.zeroCreate 8
     let move x d = (x + d) &&& 0b111
@@ -25,11 +24,11 @@
 
     let step () =
         let fetch () = i <- incp() |> get; slot <- 0
-        let decode () = slot <- slot + 1; (i >>> (32 - slot * 8)) &&& 0xff
+        let prefetch () = if slot = 4 then fetch ()
+        let decode () = prefetch (); slot <- slot + 1; let inst = (i >>> (32 - slot * 8)) &&& 0xff in prefetch (); inst
         let slotzero () = slot <- 0
         let setp x = p <- x; slotzero (); fetch ()
         let jump () = let m = (0xffffff >>> (slot - 1) * 8) in (p &&& (~~~m)) ||| (i &&& m) |> setp
-        if slot = 4 then fetch ()
         let ex () = let x = r in r <- p; setp x
         let next f g = if r = 0 then popr () |> ignore; f () else r <- r - 1; g ()
         let multiply () =
@@ -69,10 +68,64 @@
             | 0x1d -> pops () |> pushr       // push
             | 0x1e -> b <- pops ()           // b! (B-store)
             | 0x1f -> a <- pops ()           // a! (A-store)
+            | x -> extention x
 
-    member x.Run() = try while true do step () with _ -> ()
+    member x.Run() =
+        try
+            while true do
+                step ()
+                hook p i slot t a b s si stk r ri rtn ram
+        with _ -> ()
 
+open Console
+open Serdes
 open Devices
 
-(new Machine([|blockInput; consoleInputBlocking; consoleInputNonBlocking|], [|blockOutput; consoleOutput; blockInputSelect; blockOutputSelect|])).Run()
+let mutable debug = true
+
+let breakpoint = function 0x20 -> debug <- true
+
+let visualize p i slot t a b s si (stk : int array) r ri (rtn : int array) ram =
+    if debug then
+        match consoleRead () with
+        | 'g' ->
+            consoleClear (); consoleRefresh ()
+            debug <- false; ()
+        | _ ->
+            let highlight b = if b then Black, White else White, Black
+            let writeHighlight b = let fg, bg = highlight b in consoleWrite fg bg
+            let write = writeHighlight false
+            let space () = write "    "
+            let line = consoleWriteLine
+            let line2 () = line (); line ()
+            let display name reg = sprintf "%s: %08x" name reg |> write
+            let displayI () =
+                write "I: "
+                let mutable name = "???"
+                for x in 24 .. -8 .. 0 do
+                    let current = 24 - slot * 8 = x
+                    let fg, bg = highlight current
+                    let inst = byte ((i >>> x) &&& 0xff)
+                    if current then
+                        match Map.tryFind inst instName with
+                        | Some n -> name <- n
+                        | None -> ()
+                    consoleWrite fg bg (sprintf "%02x" inst)
+                write (sprintf " %s" name)
+            let displayStacks () =
+                for x in 0 .. 7 do
+                    write "   "
+                    sprintf "%08x" stk.[x] |> writeHighlight (si = x)
+                    write "       "
+                    sprintf "%08x" rtn.[x] |> writeHighlight (ri = x)
+                    line ()
+            consoleClear ()
+            display "P" p; space (); displayI (); line2 ()
+            display "A" a; space (); display "B" b; line2 ()
+            display "T" t; line ()
+            display "S" s; space (); display "R" r; line ()
+            displayStacks ()
+            consoleRefresh ()
+
+(new Machine([|blockInput; consoleInputBlocking; consoleInputNonBlocking|], [|blockOutput; consoleOutput; blockInputSelect; blockOutputSelect|], visualize, breakpoint)).Run()
 System.Console.ReadLine() |> ignore
