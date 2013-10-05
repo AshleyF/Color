@@ -12,7 +12,7 @@ let color = function
     | Yellow  -> ConsoleColor.Yellow
     | Green   -> ConsoleColor.Green
     | White   -> ConsoleColor.White
-    | Blue    -> ConsoleColor.DarkBlue
+    | Blue    -> ConsoleColor.Blue
     | Gray    -> ConsoleColor.DarkGray
     | Magenta -> ConsoleColor.Magenta
     | Black   -> ConsoleColor.Black
@@ -25,23 +25,26 @@ let x, y = ref 0, ref 0
 let consoleBeep () = Console.Beep()
 let consoleRead () = Console.ReadKey(true).KeyChar
 
+let consoleSetX x' = x := x'
+let consoleSetY y' = y := y'
+let consoleSetXY x' y' = consoleSetX x'; consoleSetY y'
+
 let consoleClear () = // Console.Clear()
     current := empty ()
-    x := 0; y := 0
+    consoleSetXY 0 0
 
 let consoleWriteLine () = // Console.WriteLine()
-    x := 0
-    y := min (height - 1) (!y + 1)
+    min (height - 1) (!y + 1) |> consoleSetXY 0
 
 let consoleWrite f b (s : string) =
     let write c =
         (!current).[!x, !y] <- (f, b, c)
-        x := !x + 1
+        !x + 1 |> consoleSetX
         if !x = width then consoleWriteLine ()
     Seq.iter write s
 
 let consoleWriteStatus (s : string) =
-    x := 0; y := height - 3 // Console.SetCursorPosition(0, height - 3)
+    height - 3 |> consoleSetXY 0 // Console.SetCursorPosition(0, height - 3)
     consoleWrite Magenta Black (s.Substring(0, min (s.Length) (width - 1)))
 
 let consoleRefresh () =
