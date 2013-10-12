@@ -62,6 +62,7 @@ let consoleRefresh () =
         for x in 0 .. width - 1 do
             write x y (!current).[x, y]
     last := !current
+    Console.SetCursorPosition(!x, !y)
 
 let consoleInit () =
     Console.CursorVisible <- false
