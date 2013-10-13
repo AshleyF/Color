@@ -129,6 +129,7 @@ let rec edit state key =
             | Gray, "exn"  -> "end"
             | Gray, "j"    -> "jump"
             | Gray, "i"    -> "if"
+            | Gray, "m"    -> "mark"
             | Gray, "n"    -> "next"
             | Gray, "o"    -> "or"
             | Gray, "orv"  -> "over"

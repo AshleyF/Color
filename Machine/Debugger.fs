@@ -10,11 +10,21 @@ let mutable last = 0, 0, 0, 0, 0, 0, 0, 0, 0
 let mutable origin = 0
 let mutable instructions, time = 0, 0
 
-let breakpoint = function 0x20 -> debug <- true
+let hook = function
+    | 0x20 -> debug <- true // 'break' into debugger
+    | 0x21 -> instructions <- 0; time <- 0 // 'mark' zero statistics
 
 let debugger p i slot a b t s si (stk : int array) r ri (rtn : int array) (ram : int array) =
-    let timeInstruction = function
-        | _ -> time <- time + 15
+    let timeInstruction =
+        let timeMemoryOp reg = if reg &&& 0x8000 = 0 then 51 else 15
+        function
+        | 0x04uy -> 20 // unext
+        | x when x <= 0x07uy -> 51 // transfer instructions
+        | 0x08uy | 0x0cuy -> timeMemoryOp p // @p !p
+        | 0x09uy | 0x0duy | 0x0buy | 0x0fuy -> timeMemoryOp a // @+ !+ @ !
+        | 0x0auy | 0x0euy -> timeMemoryOp b // @b !b
+        | x when x <= 0x1fuy -> 15 // ALU operations
+        | _ -> 0 // debugging instructions
     let p', i', a', b', t', s', si', r', ri' = last
     last <- p, i, a, b, t, s, si, r, ri
     if debug then
@@ -45,7 +55,7 @@ let debugger p i slot a b t s si (stk : int array) r ri (rtn : int array) (ram :
                     match Map.tryFind inst instName with
                     | Some n -> name <- n
                     | None -> ()
-                    timeInstruction inst
+                    time <- time + timeInstruction inst
                 consoleWrite (if i = i' then White else Yellow) (if current then Red else Black) (sprintf "%02x" inst)
             write Gray (sprintf " %s" name)
         let indent = 18
@@ -76,5 +86,5 @@ let debugger p i slot a b t s si (stk : int array) r ri (rtn : int array) (ram :
             debug <- false; ()
         | _ -> ()
 
-(new Machine([|blockInput; consoleInputBlocking; consoleInputNonBlocking|], [|blockOutput; consoleOutput; blockInputSelect; blockOutputSelect|], debugger, breakpoint)).Run()
+(new Machine([|blockInput; consoleInputBlocking; consoleInputNonBlocking|], [|blockOutput; consoleOutput; blockInputSelect; blockOutputSelect|], debugger, hook)).Run()
 System.Console.ReadLine() |> ignore
