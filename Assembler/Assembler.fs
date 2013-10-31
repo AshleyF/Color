@@ -37,14 +37,15 @@ let assemble (source : Tagged list) =
             ip := !h
             h := !h + 1
             slot := 3
-    let pack i =
+    let packInst show i =
         if !slot = -1 then align ()
         let a = get ()
         lastIp := !ip
         lastSlot := !slot
         asm.[!ip] <- Some { a with Value = a.Value ||| ((int i) <<< (!slot * 8)) }
-        comment (instName.[i])
+        if show then comment (instName.[i])
         slot := !slot - 1
+    let pack = packInst true
     let pad () =
         if !slot <> 3 then
             while !slot <> -1 do pack 0x1cuy // nop
@@ -87,6 +88,7 @@ let assemble (source : Tagged list) =
         | None -> failwith "Address in unpacked cell."
     let dataMacro () = pop () |> data
     let endMacro () =
+        comment "Yend"
         padAsNeeded !ip 
         pack 0x02uy // jump
         address !ip (pop ()) "" true
@@ -106,8 +108,9 @@ let assemble (source : Tagged list) =
                 let jump = 0x02 <<< (!lastSlot * 8) // jump
                 asm.[!lastIp] <- Some { a with Value = a.Value &&& (~~~mask) ||| jump; Comment = List.map (fun w -> if w = "call" then "jump" else w) a.Comment }
             else
-                pack 0x00uy // return
+                packInst false 0x00uy // return
                 align ()
+            comment "Y;"
         | None -> failwith "Invalid lastIp."
     let beginMacro () =
         pad ()
@@ -118,11 +121,13 @@ let assemble (source : Tagged list) =
         pack 0x1duy (* push *)
         pad (); push !ip // beginMacro ()
     let nextMacro () =
+        comment "Ynext"
         let a = pop ()
         if a = !ip && !slot >= 0 then pack 0x04uy // unext
-        else padAsNeeded a; pack 0x05uy (* next *); address !ip a "" true
-    let ifMacro code =
+        else padAsNeeded a; packInst false 0x05uy (* next *); address !ip a "" true
+    let ifMacro name code =
         padAsNeeded !ip
+        comment (sprintf "Y%s" name)
         pack code // if/-if
         push !ip
         align () //address !ip 0 "" false // to be patched by 'then'
@@ -192,8 +197,8 @@ let assemble (source : Tagged list) =
             | "begin" -> beginMacro ()
             | "end"   -> endMacro ()
             | "next"  -> nextMacro ()
-            | "if"    -> ifMacro 0x06uy
-            | "-if"   -> ifMacro 0x07uy
+            | "if"    -> ifMacro w 0x06uy
+            | "-if"   -> ifMacro w 0x07uy
             | "then"  -> thenMacro ()
             | _ -> error (sprintf "UNKNOWN IMMEDIATE WORD (%s)" w)
         | Compile (Number n) -> literal n
