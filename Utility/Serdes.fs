@@ -22,7 +22,7 @@ let serialize =
         let pack v x = x <<< 8 ||| v
         let len = s.Length
         let header = s |> Seq.take (min 3 len) |> Seq.fold (fun h c -> pack (int c) h) 0 |> pack len // 3 chars and len
-        let chars = (Seq.map (int >> pack 0xff) >> List.ofSeq) s // char and ff
+        let chars = (Seq.map (int >> pack 0xfd) >> List.ofSeq) s // char and fd
         header :: chars
     let serialize' = function
         | Define n           ->  0x40 :: str n
