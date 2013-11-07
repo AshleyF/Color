@@ -1,0 +1,16 @@
+_kernel 
+ 
+ `load 
+ 
+ :!here ^@p ^drop ^!p `; :here 100 `; _assembled _code 
+ :!dict ^@p ^drop ^!p `; :dict 1800 `; _dictionary _space 
+ 
+ :def dict ^a! ^!+ here ^!+ ^a !dict `; 
+ :find 1800 ^a! 
+ :scan ^dup ^@+ ^or `if ^drop scan `; `then ^drop ^drop ^@ `; 
+ :compile here ^a! ^!+ ^a !here `; 
+ :callword find ^push `; 
+ :compword find 3000000 ^or compile `; 
+ :compnum 8000000 compile compile `; 
+ 
+ `init

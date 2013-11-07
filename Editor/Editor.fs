@@ -62,6 +62,7 @@ let rec edit state key =
     let save s =
         let tokens = (state.Before |> List.rev) @ (match s.Current with Some c -> [c] | None -> []) @ s.After
         saveTokens s.Block tokens
+        File.WriteAllText(blockFile s.Block "txt", tokens2text tokens)
         sprintf "Saved block %i" s.Block |> message s
     let move b c a =
         match b, c with

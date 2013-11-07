@@ -217,7 +217,7 @@ let changed (a : FileSystemEventArgs) =
         blockInputSelect -1
         Console.ForegroundColor <- ConsoleColor.Magenta
         printfn "Error: %s" ex.Message
-let watcher = new FileSystemWatcher(Path.GetDirectoryName(blockFile 0))
+let watcher = new FileSystemWatcher(Path.GetDirectoryName(blockFile 0 "blk"))
 watcher.Changed.Add(changed)
 watcher.Created.Add(changed)
 let rec watch () =

@@ -121,3 +121,15 @@ let token2tagged = function
 
 let loadTokens = loadTagged >> List.map tagged2token
 let saveTokens b = List.map token2tagged >> saveTagged b
+
+let tokens2text =
+    let prefix = function
+        | Gray   -> "^"
+        | Red    -> ":"
+        | Green  -> ""
+        | Yellow -> "`"
+        | White  -> "_"
+    List.map (function
+        | Blue, "." -> "\t"
+        | Blue, "cr" -> Environment.NewLine
+        | color, token -> (prefix color) + token) >> String.concat " "

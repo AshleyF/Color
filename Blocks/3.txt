@@ -1,0 +1,7 @@
+_echo _console-io _(infinite!) 
+ 
+ `load 
+ 
+ :echo ^@b ^!b echo `; 
+ 
+ `init echo

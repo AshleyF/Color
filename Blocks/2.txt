@@ -1,0 +1,3 @@
+_echo _console-io 
+ 
+ ^- `for ^@b ^!b `next

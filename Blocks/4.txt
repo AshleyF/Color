@@ -1,0 +1,7 @@
+_alphabet _demo 
+ 
+ `load 
+ 
+ :alphabet 60 19 `for 1 ^+ ^dup ^!b `next `; 
+ 
+ `init ^break alphabet

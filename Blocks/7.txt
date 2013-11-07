@@ -1,0 +1,15 @@
+_breakout 
+ 
+ `load 
+ 
+ :ballx ^@p ^drop ^@p `; :!ballx 0 `; 
+ :bally ^@p ^drop ^@p `; :!bally 0 `; 
+ 
+ :shift 7 `for ^2* `next `; 
+ :setyx 10000 ^or shift ^or ^!b `; 
+ 
+ :go 7 4 setyx 61 ^!b 
+ 
+ `init ^break go 
+ 
+ _block _reading: ^@b

@@ -1,0 +1,12 @@
+_hello _world 
+ 
+ `load 
+ 
+ :char ^dup 0ff ^and ^!b 
+ :shift 7 `for ^2/ `next `; 
+ :word 3 `for char `next ^drop `; 
+ :message 
+ 	 20212121 736b636f 72206874 726f6672 6f6c6f63 
+ 	 4 `for word `next `; 
+ 
+ `init ^break message

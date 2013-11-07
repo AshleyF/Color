@@ -1,0 +1,37 @@
+:color forth _editor! 
+ 
+ 	 :h _/ :l left _/ right 
+ 	 :k _/ :j up _/ down _to _previous/next _definition 
+ 
+ 	 :^r _switch _to :red _words 
+ 	 :^y _switch _to `yellow _words 
+ 	 :^g _switch _to green _words 
+ 	 :^w _switch _to white _words 
+ 	 :^a _switch _to gray _words 
+ 
+ 	 :f _toggle _showing format _words 
+ 	 :c _toggle _showing comments 
+ 
+ 	 :1-0 load _block _(0 _is _10) 
+ 	 :s save _current _block 
+ 
+ 	 :x _/ :^x delete _/ back 
+ 	 :y yank _(copy) 
+ 	 :p _/ :^p put _(paste) _before _/ _after 
+ 
+ 	 :u _/ :c-r undo _/ redo _infinite! 
+ 
+ 	 :i _/ :a insert _/ after 
+ 	 :o open _new _line 
+ 
+ 	 :* _/ :# find prev/next _under _cursor 
+ 
+ _the _following _gray _instruction _words _are _allowed: 
+ 
+ 	 ^; ^ex ^jump ^call ^unext ^next ^if ^-if 
+ 	 ^@p ^@+ ^@b ^@ ^!p ^!+ ^!b ^! 
+ 	 ^+* ^2* ^2/ ^- ^+ ^and ^or 
+ 	 ^drop ^dup ^pop ^over ^a ^. ^push ^b! ^a! 
+ 	 ^break 
+ 
+ :have fun _color `coding! 
