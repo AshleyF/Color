@@ -1,0 +1,36 @@
+_techniques 
+ 
+ `load 
+ 
+ :zero ^dup ^dup ^or `; 
+ :-1 zero ^- `; 
+ :+1 -1 ^2* ^- `; 
+ :-2 -1 ^2* `; 
+ 
+ :1+ 1 ^+ `; 
+ :neg ^- 1+ `; 
+ :sub ^- ^+ 1+ `; _t _from _s, _or _leave _one _too _small 
+ :sub ^- ^+ ^- `; _s _from _t 
+ :sub ^push ^- ^pop ^+ ^- `; _t _from _s 
+ 
+ :2dup ^over ^over `; 
+ :inc-or ^over ^- ^and ^or `; 
+ 
+ :swap ^over ^push ^push ^drop ^pop ^pop `; _7 _inst, _14.1ns 
+ :swap ^over ^push ^over ^or ^or ^pop `; _7 _inst, _14.1ns _(fewer _stack) 
+ :swap ^push ^a! ^pop ^a `; _5 _inst, _11.1ns _(stomps _on _a) 
+ 
+ :nip ^over ^or ^or `; 
+ 
+ :dec ^push ^next _here _1+ `17 `addr ^pop `; 
+ 
+ _variables 
+ :!x ^@p ^drop ^!p `; 
+ :x 123 `; 
+ 
+ :less `; 
+ 
+ :abs ^dup neg 
+ :max less `if swap ^drop `; 
+ 
+ `init ^. ^break ^. x 456 !x x 1 2 3 ^mark ^. dec
