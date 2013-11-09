@@ -102,6 +102,7 @@ let assemble (source : Tagged list) =
     let returnMacro () =
         match asm.[!lastIp] with
         | Some a ->
+            comment "Y;"
             let mask = 0xff <<< (!lastSlot * 8)
             let call = 0x03 <<< (!lastSlot * 8) // call
             if a.Value &&& mask = call then // tail call optimization
@@ -110,7 +111,6 @@ let assemble (source : Tagged list) =
             else
                 packInst false 0x00uy // return
                 align ()
-            comment "Y;"
         | None -> failwith "Invalid lastIp."
     let beginMacro () =
         pad ()
@@ -130,10 +130,17 @@ let assemble (source : Tagged list) =
         comment (sprintf "Y%s" name)
         pack code // if/-if
         push !ip
-        align () //address !ip 0 "" false // to be patched by 'then'
+        align () // to be patched by 'then' or 'else'
+    let elseMacro () =
+        padAsNeeded !ip
+        address (pop ()) (!ip + 1) "" true // patch 'if' to just beyond 'else'
+        comment "Yelse"
+        pack 0x02uy // jump
+        push !ip
+        align () // to be patched by 'then'
     let thenMacro () =
         pad ()
-        address (pop ()) !ip "" true
+        address (pop ()) !ip "" true // patch 'if' or 'else'
         comment "Ythen"
     let loadMacro () =
         comment "Yload"
@@ -199,6 +206,7 @@ let assemble (source : Tagged list) =
             | "next"  -> nextMacro ()
             | "if"    -> ifMacro w 0x06uy
             | "-if"   -> ifMacro w 0x07uy
+            | "else"  -> elseMacro ()
             | "then"  -> thenMacro ()
             | _ -> error (sprintf "UNKNOWN IMMEDIATE WORD (%s)" w)
         | Compile (Number n) -> literal n

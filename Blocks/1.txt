@@ -32,6 +32,6 @@
  	 ^@p ^@+ ^@b ^@ ^!p ^!+ ^!b ^! 
  	 ^+* ^2* ^2/ ^- ^+ ^and ^or 
  	 ^drop ^dup ^pop ^over ^a ^. ^push ^b! ^a! 
- 	 ^break 
+ 	 ^break ^mark 
  
  :have fun _color `coding! 

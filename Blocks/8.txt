@@ -1,11 +1,20 @@
-`load 
+_multiply-step _samples 
  
- :mult0 ^a! 0 1f `for ^+* `next ^a `; _73 _inst, _139.9ns, _4 _cells 
+ `load 
+ 
+ :step ^dup 1 ^and `if ^drop ^over ^+ `else ^drop `then ^2/ `; 
+ :mult 
+ 	 7 `for ^2* `next ^over 
+ 	 7 `for step `next `; 
+ 
+ 
+ :mult0 ^a! 0 1f `for ^+* `next ^drop ^drop ^a `; _73 _inst, _139.9ns, _4 _cells 
+ 
  
  :mult1 _30 _inst, _64.2ns, _9 _cells 
  	 ^a! ^+* ^+* ^+* ^+* ^+* ^+* ^+* ^+* ^+* ^+* ^+* ^+* ^+* ^+* ^+* ^+* 
- 	 ^+* ^+* ^+* ^+* ^+* ^+* ^+* ^+* ^+* ^+* ^+* ^+* ^+* ^+* ^+* ^+* ^a `; 
+ 	 ^+* ^+* ^+* ^+* ^+* ^+* ^+* ^+* ^+* ^+* ^+* ^+* ^+* ^+* ^+* ^+* ^drop ^drop ^a `; 
  
- :mult2 ^a! 0 09 `for ^+* ^+* ^+* `next ^+* ^+* ^a `; _51 _inst, _95.9ns, _5 _cells 
+ :mult2 ^a! 0 9 `for ^+* ^+* ^+* `next ^+* ^+* ^drop ^drop ^a `; _51 _inst, _95.9ns, _5 _cells 
  
- `init ^break ^mark 0b0b 142a2d mult2 ^break
+ `init ^break ^mark 0b0b 142a2d _mult2 _mult0 31 3d ^. mult ^break
