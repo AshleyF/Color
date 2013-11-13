@@ -132,7 +132,7 @@ let assemble (source : Tagged list) =
         push !ip
         align () // to be patched by 'then' or 'else'
     let elseMacro () =
-        padAsNeeded !ip
+        pad ()
         address (pop ()) (!ip + 1) "" true // patch 'if' to just beyond 'else'
         comment "Yelse"
         pack 0x02uy // jump
@@ -152,7 +152,7 @@ let assemble (source : Tagged list) =
         pack 0x04uy // unext
         pad ()
     let initMacro () =
-        comment "Ystart"
+        comment "Yinit"
         let orig = match !origin with Some x -> x | None -> 0
         pad ()
         count := !ip - orig - 1

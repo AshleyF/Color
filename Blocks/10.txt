@@ -1,0 +1,16 @@
+`load 
+ 
+ :block 8002 ^b! ^!b 8000 ^b! `; 
+ :shift ^2/ ^2/ ^2/ ^2/ ^2/ ^2/ ^2/ ^2/ `; 
+ :mask 0ff ^and `; 
+ :read 
+ 	 ^@b _size 
+ 	 `for ^@b 
+ 	 	 ^dup mask 0fd ^or 
+ 	 	 `if ^drop ^drop 
+ 	 	 `else ^drop shift mask 8001 ^a! ^! `then 
+ 	 `next `; 
+ 
+ :test 2 block read 
+ 
+ `init ^break test
