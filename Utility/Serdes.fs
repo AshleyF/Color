@@ -45,7 +45,8 @@ let deserialize =
                 let w = Seq.take len t |> Seq.map (fun c -> char (c >>> 8)) |> stringOfSeq
                 let t' = Seq.skip len t |> List.ofSeq
                 deserialize' (tag w :: code) t'
-        let num tag = function n :: t -> deserialize' (tag n :: code) t
+            | _ -> failwith "Invalid serialization format (string)."
+        let num tag = function n :: t -> deserialize' (tag n :: code) t | _ -> failwith "Invalid serialization format (number)."
         function
         | 0x40 :: t -> str Define t
         | 0x41 :: t -> num (Number >> Execute) t
@@ -118,6 +119,7 @@ let token2tagged = function
     | Blue,  f -> Format f
     | White, s -> Comment s
     | Gray,  s -> Instruction (nameInst.[s])
+    | _ -> failwith "Invalid token."
 
 let loadTokens = loadTagged >> List.map tagged2token
 let saveTokens b = List.map token2tagged >> saveTagged b
@@ -129,6 +131,7 @@ let tokens2text =
         | Green  -> ""
         | Yellow -> "`"
         | White  -> "_"
+        | _ -> failwith "Invalid color."
     List.map (function
         | Blue, "." -> "\t"
         | Blue, "cr" -> Environment.NewLine

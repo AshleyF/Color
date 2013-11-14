@@ -12,6 +12,7 @@ let consoleOutput x =
     | 1 -> Console.SetCursorPosition(x &&& 0xff, (x >>> 8) &&& 0xff)
     | 2 -> Console.ForegroundColor <- enum (x &&& 0xf)
     | 3 -> Console.BackgroundColor <- enum (x &&& 0xf)
+    | _ -> failwith "Invalid console output."
 
 let blockFile = sprintf @"..\..\..\Blocks\%i.%s"
 
