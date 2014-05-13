@@ -1,6 +1,8 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
-# Visual Studio 2012
+# Visual Studio 2013
+VisualStudioVersion = 12.0.21005.1
+MinimumVisualStudioVersion = 10.0.40219.1
 Project("{F2A71F9B-5D33-465A-A702-920D77279786}") = "Machine", "Machine\Machine.fsproj", "{220E0FC3-F9E1-495C-9074-15DFDBACD7AE}"
 EndProject
 Project("{F2A71F9B-5D33-465A-A702-920D77279786}") = "Utility", "Utility\Utility.fsproj", "{8D0FB50B-10B8-40BB-8115-F060F081F345}"
