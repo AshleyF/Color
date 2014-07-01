@@ -87,7 +87,7 @@ let str2num (s : string) =
 let instructions =
     [";"; "ex"; "jump"; "call"; "unext"; "next"; "if"; "-if"; "@p"; "@+"; "@b"; "@"; "!p"; "!+"; "!b"; "!"
      "+*"; "2*"; "2/"; "-"; "+"; "and"; "or"; "drop"; "dup"; "pop"; "over"; "a"; "."; "push"; "b!"; "a!"
-     "break"; "mark"]
+     "break"; "mark"; "print"]
     |> List.mapi (fun i n -> byte i, n)
 
 let instName = Map.ofList instructions

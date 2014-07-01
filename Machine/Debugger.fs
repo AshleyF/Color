@@ -13,6 +13,7 @@ let mutable instructions, time = 0, 0
 let hook = function
     | 0x20 -> debug <- true // 'break' into debugger
     | 0x21 -> instructions <- 0; time <- 0 // 'mark' zero statistics
+    | 0x22 -> let _, _, _, _, t, s, _, _, _ = last in printfn "S: %i  T: %i" s t // 'print' top of stack
     | _ -> failwith "Invalid instruction."
 
 let debugger p i slot a b t s si (stk : int array) r ri (rtn : int array) (ram : int array) =

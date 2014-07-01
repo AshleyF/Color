@@ -136,6 +136,7 @@ let rec edit state key =
             | Gray, "orv"  -> "over"
             | Gray, "p"    -> "pop"
             | Gray, "popu" -> "push"
+            | Gray, "popr" -> "print"
             | Gray, "t"    -> "then"
             | Gray, "u"    -> "unext"
             | Gray, "-i"   -> "-if"
