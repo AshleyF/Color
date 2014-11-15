@@ -61,7 +61,6 @@ let deserialize =
 
 let saveRaw len b (r : int list) =
     blockOutputSelect b
-    //printfn "SAVE: %i" r.Length
     if len then blockOutput (r.Length)
     List.iter blockOutput r
     blockOutputSelect -1 // close
@@ -69,7 +68,6 @@ let saveRaw len b (r : int list) =
 let loadRaw b =
     blockInputSelect b
     let len = try blockInput () with _ -> 0
-    //printfn "LOAD: %i" len
     let raw = [for _ in 0 .. len - 1 do yield blockInput ()]
     blockInputSelect -1 // close
     raw
