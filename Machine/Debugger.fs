@@ -82,7 +82,7 @@ let debugger p i slot a b t s si (stk : int array) r ri (rtn : int array) (ram :
         displayRAM ()
         consoleRefresh ()
         match consoleRead () with
-        | k when int k = 13 (* enter *) ->
+        | k when int k = 13 (* enter *) || int k = 10 (* newline *) ->
             consoleClear ()
             consoleRefresh ()
             debug <- false; ()

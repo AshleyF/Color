@@ -14,7 +14,7 @@ let consoleOutput x =
     | 3 -> Console.BackgroundColor <- enum (x &&& 0xf)
     | _ -> failwith "Invalid console output."
 
-let blockFile = sprintf @"..\..\..\Blocks\%i.%s"
+let blockFile = sprintf @"../../../Blocks/%i.%s"
 
 let blockIO =
     let block m b = File.Open(blockFile b "blk", m, FileAccess.ReadWrite, FileShare.Read)

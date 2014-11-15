@@ -19,7 +19,7 @@ let color = function
 
 let empty () = Array2D.create width height (White, Black, ' ')
 let current = ref (empty ())
-let last = ref (empty ())
+let last = ref (empty () |> Array2D.map (fun (f, b, _) -> (f, b, 'X')))
 let x, y = ref 0, ref 0
 
 let consoleBeep () = Console.Beep()
@@ -59,6 +59,7 @@ let consoleRefresh () =
             Console.Write(c)
         else move := true
     for y in 0 .. height - 1 do
+        move := true
         for x in 0 .. width - 1 do
             write x y (!current).[x, y]
     last := !current
@@ -67,6 +68,5 @@ let consoleRefresh () =
 let consoleInit () =
     Console.CursorVisible <- false
     Console.SetWindowSize(width, height)
-    Console.SetBufferSize(width, height)
 
 // TODO: ANSI commands for positioning and colors instead of .NET Console.* APIs on Linux

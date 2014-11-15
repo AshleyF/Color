@@ -216,20 +216,26 @@ let assemble (source : Tagged list) =
     print ()
     save ()
 
+let assembleBlock = ref ""
 let changed (a : FileSystemEventArgs) =
-    try
-        Thread.Sleep(100)
-        Console.Clear()
-        Int32.Parse(Path.GetFileNameWithoutExtension(a.FullPath)) |> loadTagged |> assemble
-    with ex ->
-        blockInputSelect -1
-        Console.ForegroundColor <- ConsoleColor.Magenta
-        printfn "Error: %s" ex.Message
+    if Path.GetExtension(a.FullPath) = ".blk" then
+        assembleBlock := a.FullPath
+        printfn "QUEUE: %s" a.FullPath
 let watcher = new FileSystemWatcher(Path.GetDirectoryName(blockFile 0 "blk"))
 watcher.Changed.Add(changed)
 watcher.Created.Add(changed)
 let rec watch () =
     watcher.WaitForChanged(WatcherChangeTypes.Changed ||| WatcherChangeTypes.Created) |> ignore
+    let block = !assembleBlock
+    assembleBlock := ""
+    if block.Length > 0 then
+        try
+            Console.Clear()
+            Int32.Parse(Path.GetFileNameWithoutExtension(block)) |> loadTagged |> assemble
+        with ex ->
+            blockInputSelect -1
+            Console.ForegroundColor <- ConsoleColor.Magenta
+            printfn "Error: %s" ex.Message
     watch ()
 watch ()
 
