@@ -16,9 +16,7 @@ Don't worry too much about what the code above does (prints "colorForth rocks!")
 
 ![Hello world assembly](hello_world_assembly.png)
 
-Isn't the source beautiful? So colorful! The colors are not merely syntax highlighting. They drive the semantics! They are chosen at author-time in a specialized editor. I'm [working on a little tool chain](http://github.com/AshleyF/Color) including such an editor, an assembler and hardware emulator. Here's a demo:
-
-![Demo](http://youtu.be/LJoRyxRcj4A)
+Isn't the source beautiful? So colorful! The colors are not merely syntax highlighting. They drive the semantics! They are chosen at author-time in a specialized editor. I'm [working on a little tool chain](http://github.com/AshleyF/Color) including such an editor, an assembler and hardware emulator. [Here's a demo](http://youtu.be/LJoRyxRcj4A)
 
 There are white comments, yellow macros, red definitions with gray instructions and green literal numbers and calls to previously defined (red) words. You can get a basic idea of the structure of the language. Reading top to bottom, you have definitions from low to high level in terms of primitives, literals and calls to previously defined words (never forward references).
 
@@ -95,7 +93,7 @@ Yellow tokens are executed immediately during compilation. A yellow number is pu
 
 | Source                 | Assembly                            |
 |------------------------|-------------------------------------|
-| ![Echo I/O](echo2.png) | ![Echo I/O assembly](echo2_asm.png) |
+| ![Echo I/O](echo2.png) | ![Echo I/O assembly](echo_asm.png) |
 
 Red words don't emit any code. They just add an entry to the dictionary; mapping the name to the current address to which we're compiling code.
 
