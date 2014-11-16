@@ -2,6 +2,7 @@
 
 This is the beginning of a series:
 
+* Chuck Moore's Creations
 * [Programming the F18](programming_the_f18.md)
 * [Beautiful Simplicity of colorForth](beautiful_simplicity.md)
 * [Multiply-step Instruction](multiply_step.md)
