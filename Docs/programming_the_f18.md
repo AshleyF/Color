@@ -43,7 +43,7 @@ The other stack is the data stack for evaluation and argument passing. Having ze
 These are the 32 instructions of this simple machine. I will briefly describe them here and will get into more detail on some (e.g. the multiply-step instruction) in future posts.
 
 | Op | Mneumonic | Class    | Time (ns) | Notes                                                 |
-| -- | --------- | -------- | --------- | ----------------------------------------------------- |
+|----|-----------|----------|-----------|-------------------------------------------------------|
 | 00 | ;         | Transfer | 5.1       | “return”                                              |
 | 01 | ex        | Transfer | 5.1       | “execute” (swap P and R)                              |
 | 02 | (jump)    | Transfer | 5.1       |                                                       | 
@@ -79,10 +79,10 @@ These are the 32 instructions of this simple machine. I will briefly describe th
 
 In the simulator there are a couple of extra (unofficial) instructions for debugging and performance measurement:
 
-Op | Mneumonic | Class    | Time (ns) | Notes                                                   |
----------------------------------------------------------------------                           |
-20 | break     | Debug    | N/A       | Break into debug view                                   |
-21 | mark      | Debug    | N/A       | Reset performance statistics                            |
+| Op | Mneumonic | Class    | Time (ns) | Notes                        |
+|----|-----------|----------|-----------|------------------------------|
+| 20 | break     | Debug    | N/A       | Break into debug view        |
+| 21 | mark      | Debug    | N/A       | Reset performance statistics |
 
 The ALU operations mostly do just what you'd expect; taking one or two arguments from the stack and replacing with the result. Multiply-step is a complicated one which I'll describe in a future post. It essentially is one step in a multiply/shift operation; needing to be executed in a micronext loop to multiply values. Very primitive. You may want to generally think of the instruction set as microcode. I should point out that or is an exclusive-or and that - is a "not" operation rather than a full twos-compliment negation. We'll get into how to make good use of these instructions as we go. There are a lot of techniques to cover and it's pretty fun! The instruction set does take some getting used to.
 
