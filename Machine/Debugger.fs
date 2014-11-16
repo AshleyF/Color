@@ -88,5 +88,8 @@ let debugger p i slot a b t s si (stk : int array) r ri (rtn : int array) (ram :
             debug <- false; ()
         | _ -> ()
 
+consoleClear ()
+consoleRefresh ()
+
 (new Machine([|blockInput; consoleInputBlocking; consoleInputNonBlocking|], [|blockOutput; consoleOutput; blockInputSelect; blockOutputSelect|], debugger, hook)).Run()
 System.Console.ReadLine() |> ignore
