@@ -1,6 +1,6 @@
 # Programming the F18
 
-This is second in a series:
+This is the second in a series:
 
 * [Chuck Moore's Creations](chuck_moores_creations.md)
 * Programming the F18

@@ -9,8 +9,6 @@ Having fun playing around with [colorForth](http://www.colorforth.com/cf.htm) an
 * [Multiply-step Instruction](multiply_step.md)
 * [Simple Variables](simple_variables.md)
 
-## Playing
-
 ![Editor/Assembler](Docs/editor_assembler.png)
 
 The assembler watches for changes to the block files saved by the editor. I leave an instance of this running in one terminal window (right) while working in the editor in another (left). Later I run the machine in a third window.
