@@ -42,47 +42,47 @@ The other stack is the data stack for evaluation and argument passing. Having ze
 
 These are the 32 instructions of this simple machine. I will briefly describe them here and will get into more detail on some (e.g. the multiply-step instruction) in future posts.
 
-Op | Mneumonic | Class    | Time (ns) | Notes
----------------------------------------------------------------------
-00 | ;         | Transfer | 5.1       | “return”
-01 | ex        | Transfer | 5.1       | “execute” (swap P and R)
-02 | (jump)    | Transfer | 5.1        
-03 | (call)    | Transfer | 5.1        
-04 | unext     | Transfer | 2.0       | “micronext” (loop within I, decrement R)
-05 | next      | Transfer | 5.1       | “next” (loop to address, decrement R)
-06 | if        | Transfer | 5.1       | (jump if T=0)
-07 | -if       | Transfer | 5.1       | “minus-if” (jump if T≥0)
-08 | @p        | Data     | 5.1       | “fetch-p” (fetch inline literal via P, autoincrement)
-09 | @+        | Data     | 5.1       | “fetch-plus” (fetch via A, autoincrement)
-0a | @b        | Data     | 5.1       | “fetch-b” (fetch via B)
-0b | @         | Data     | 5.1       | “fetch” (fetch via A)
-0c | !p        | Data     | 5.1       | “store-p” (store via P, autoincrement)
-0d | !+        | Data     | 5.1       | “store-plus” (store via A, autoincrement)
-0e | !b        | Data     | 5.1       | “store-b” (store via B)
-0f | !         | Data     | 5.1       | “store” (store via A)
-10 | +*        | ALU      | 1.5       | “multiply-step”
-11 | 2*        | ALU      | 1.5       | “two-star” (left shift)
-12 | 2/        | ALU      | 1.5       | “two-slash” (right shift)
-13 | -         | ALU      | 1.5       | “not” (invert all bits)
-14 | +         | ALU      | 1.5       | “plus”
-15 | and       | ALU      | 1.5       
-16 | or        | ALU      | 1.5       | (exclusive or)
-17 | drop      | ALU      | 1.5       | 
-18 | dup       | ALU      | 1.5       | 
-19 | pop       | ALU      | 1.5       | 
-1a | over      | ALU      | 1.5       | 
-1b | a         | ALU      | 1.5       | (A to T)
-1c | .         | ALU      | 1.5       | “nop”
-1d | push      | ALU      | 1.5       | (from T to R)
-1e | b!        | ALU      | 1.5       | “b-store” (store into B)
-1f | a!        | ALU      | 1.5       | “a-store” (store into A)
+| Op | Mneumonic | Class    | Time (ns) | Notes                                                 |
+| -- | --------- | -------- | --------- | ----------------------------------------------------- |
+| 00 | ;         | Transfer | 5.1       | “return”                                              |
+| 01 | ex        | Transfer | 5.1       | “execute” (swap P and R)                              |
+| 02 | (jump)    | Transfer | 5.1       |                                                       | 
+| 03 | (call)    | Transfer | 5.1       |                                                       |
+| 04 | unext     | Transfer | 2.0       | “micronext” (loop within I, decrement R)              |
+| 05 | next      | Transfer | 5.1       | “next” (loop to address, decrement R)                 |
+| 06 | if        | Transfer | 5.1       | (jump if T=0)                                         |
+| 07 | -if       | Transfer | 5.1       | “minus-if” (jump if T≥0)                              |
+| 08 | @p        | Data     | 5.1       | “fetch-p” (fetch inline literal via P, autoincrement) |
+| 09 | @+        | Data     | 5.1       | “fetch-plus” (fetch via A, autoincrement)             |
+| 0a | @b        | Data     | 5.1       | “fetch-b” (fetch via B)                               |
+| 0b | @         | Data     | 5.1       | “fetch” (fetch via A)                                 |
+| 0c | !p        | Data     | 5.1       | “store-p” (store via P, autoincrement)                |
+| 0d | !+        | Data     | 5.1       | “store-plus” (store via A, autoincrement)             |
+| 0e | !b        | Data     | 5.1       | “store-b” (store via B)                               |
+| 0f | !         | Data     | 5.1       | “store” (store via A)                                 |
+| 10 | +*        | ALU      | 1.5       | “multiply-step”                                       |
+| 11 | 2*        | ALU      | 1.5       | “two-star” (left shift)                               |
+| 12 | 2/        | ALU      | 1.5       | “two-slash” (right shift)                             |
+| 13 | -         | ALU      | 1.5       | “not” (invert all bits)                               |
+| 14 | +         | ALU      | 1.5       | “plus”                                                |
+| 15 | and       | ALU      | 1.5       |                                                       |
+| 16 | or        | ALU      | 1.5       | (exclusive or)                                        |
+| 17 | drop      | ALU      | 1.5       |                                                       |
+| 18 | dup       | ALU      | 1.5       |                                                       |
+| 19 | pop       | ALU      | 1.5       |                                                       |
+| 1a | over      | ALU      | 1.5       |                                                       |
+| 1b | a         | ALU      | 1.5       | (A to T)                                              |
+| 1c | .         | ALU      | 1.5       | “nop”                                                 |
+| 1d | push      | ALU      | 1.5       | (from T to R)                                         |
+| 1e | b!        | ALU      | 1.5       | “b-store” (store into B)                              |
+| 1f | a!        | ALU      | 1.5       | “a-store” (store into A)                              |
 
 In the simulator there are a couple of extra (unofficial) instructions for debugging and performance measurement:
 
-Op | Mneumonic | Class    | Time (ns) | Notes
----------------------------------------------------------------------
-20 | break     | Debug    | N/A       | Break into debug view
-21 | mark      | Debug    | N/A       | Reset performance statistics
+Op | Mneumonic | Class    | Time (ns) | Notes                                                   |
+---------------------------------------------------------------------                           |
+20 | break     | Debug    | N/A       | Break into debug view                                   |
+21 | mark      | Debug    | N/A       | Reset performance statistics                            |
 
 The ALU operations mostly do just what you'd expect; taking one or two arguments from the stack and replacing with the result. Multiply-step is a complicated one which I'll describe in a future post. It essentially is one step in a multiply/shift operation; needing to be executed in a micronext loop to multiply values. Very primitive. You may want to generally think of the instruction set as microcode. I should point out that or is an exclusive-or and that - is a "not" operation rather than a full twos-compliment negation. We'll get into how to make good use of these instructions as we go. There are a lot of techniques to cover and it's pretty fun! The instruction set does take some getting used to.
 
