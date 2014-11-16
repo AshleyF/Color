@@ -3,11 +3,12 @@ Color
 
 Having fun playing around with [colorForth](http://www.colorforth.com/cf.htm) and [GreenArrays](http://www.greenarraychips.com/) architecture. See the [demo](http://www.youtube.com/watch?v=LJoRyxRcj4A&feature=share&list=UUaahWOc75YojOsBjD0RxLlw) and [blog series](http://blogs.msdn.com/b/ashleyf/archive/tags/color/).
 
+**[Blog series moved here to Github](Docs/chuck_moores_creations.md)**
 ## Playing
 
-The assembler watches for changes to the block files saved by the editor. I leave an instance of this running in one terminal window (right) while working in the editor in another (left). Later I run the machine in a third window.
-
 ![Editor/Assembler](Docs/editor_assembler.png)
+
+The assembler watches for changes to the block files saved by the editor. I leave an instance of this running in one terminal window (right) while working in the editor in another (left). Later I run the machine in a third window.
 
 ## Setup
 
