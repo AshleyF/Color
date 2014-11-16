@@ -1,15 +1,38 @@
-_breakout 
+_bouncing _ball 
  
  `load 
  
- :ballx ^@p ^drop ^@p `; :!ballx 0 `; 
- :bally ^@p ^drop ^@p `; :!bally 0 `; 
+ _coordinates 
+ :!ballx ^@p ^drop ^!p `; :ballx 0 `; 
+ :!bally ^@p ^drop ^!p `; :bally 0 `; 
  
- :shift 7 `for ^2* `next `; 
- :setyx 10000 ^or shift ^or ^!b `; 
+ _movement _directions 
+ :!dirx ^@p ^drop ^!p `; :dirx 1 `; 
+ :!diry ^@p ^drop ^!p `; :diry 1 `; 
  
- :go 7 4 setyx 61 ^!b 
+ _color _(cycles, _wrapping) 
+ :!color ^@p ^drop ^!p `; :color 0 `; 
+ :color+ color ^dup 1 ^+ 0f ^and !color `; 
  
- `init ^break go 
+ :move _one _step _in _current _direction 
+ 	 ballx dirx ^+ !ballx 
+ 	 bally diry ^+ !bally `; 
  
- _block _reading: ^@b
+ :-1 ^dup ^or ^- `; 
+ :?zero `if ^dup ^or `else ^- `then `; 
+ :> ^- ^+ ^- `-if -1 `else ^dup ^or `then `; 
+ 
+ :bounce _change _direction _upon _hitting _sides 
+ 	 ballx ?zero `if 1 !dirx `then ^drop 
+ 	 4e ballx > `if -1 !dirx `then ^drop 
+ 	 bally ?zero `if 1 !diry `then ^drop 
+ 	 27 bally > `if -1 !diry `then ^drop `; 
+ 
+ :draw _at _current _coordinaets _in _curren _color 
+ 	 3000000 color+ ^or ^!b _set _console _color _and _increment _(wrapping) 
+ 	 bally 7 `for ^2* `next ballx 1000000 ^or ^or ^!b _set _cursor _pos 
+ 	 20 ^b! _draf _space _char _(with _background _color) `; 
+ 
+ :go move bounce draw go 
+ 
+ `init go

@@ -222,7 +222,9 @@ let rec edit state key =
         |      _, k when int k = 0 -> state // ignore
         |      _, k when int k = 27 (* esc *) -> validate state |> normal
         | Normal, k when int k = 18 (* ctrl-R *) -> redo state
+        | Insert, k when int k = 10 (* enter *) -> validate state |> next |> newline
         | Insert, k when int k = 13 (* enter *) -> validate state |> next |> newline
+        | Insert, k when int k = 8  (* backspace *) -> del state
         | Insert, k when int k = 9  (* tab *)   -> validate state |> next |> tag Blue |> input '.' |> next |> tag Green
         | Insert, k when Char.IsLower(k) || Char.IsDigit(k) || Char.IsSymbol(k) || Char.IsPunctuation(k) -> input k state |> validate
         |      _, k -> failwith (sprintf "Invalid key (%i)." (int k))

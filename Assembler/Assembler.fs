@@ -220,7 +220,6 @@ let assembleBlock = ref ""
 let changed (a : FileSystemEventArgs) =
     if Path.GetExtension(a.FullPath) = ".blk" then
         assembleBlock := a.FullPath
-        printfn "QUEUE: %s" a.FullPath
 let watcher = new FileSystemWatcher(Path.GetDirectoryName(blockFile 0 "blk"))
 watcher.Changed.Add(changed)
 watcher.Created.Add(changed)
