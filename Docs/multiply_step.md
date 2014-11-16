@@ -104,4 +104,4 @@ Try is out with some silly hex words:
 
 ![Silly example](images/mult_silly.png)
 
-Have fun!
+## Next: [Simple Variables](simple_variables.md)
