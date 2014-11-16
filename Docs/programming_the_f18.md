@@ -16,7 +16,7 @@ In this post we'll learn the basics of the F18 architecture and the instruction 
 
 Before we can program an array of 144 nodes, we need to first learn to program one. I've been having a lot of fun playing around with the simulator from last post. There's the sim, a debugger, colorForth editor and assembler all [up on GitHub](http://github.com/AshleyF/Color) if you want to play along. Here is the debug view:
 
-![Debugger](debugger.png)
+![Debugger](images/debugger.png)
 
 You can see pretty much _all_ of the guts of the computer; a handful of registers, a couple of stacks and some memory. To the left is the portion of RAM from which we're executing. The right two columns show all the registers and the two stacks. It is a truly simple machine. I'm going to give just an overview here. If you want to learn the nitty gritty details I would suggest reading the [well written GreenArrays docs](http://www.greenarraychips.com/home/documents/greg/DB001-110412-F18A.pdf) and maybe taking the free ['F18A Architecture and Instruction Set' portion of the arrayForth Institute course](http://school.arrayforth.com/index.php?category=5#categoryContent).
 

@@ -14,11 +14,11 @@ When I heard that [Chuck Moore was speaking at Strange Loop](https://thestrangel
 
 His career has been amazing. He invented Forth in 1968, then went on to invent stack machine hardware in the mid-80s while relentlessly improving both for the past 45 years. His singular focus has resulted in highly perfected software and hardware, perfectly suited to one another. His latest creation (and the subject of his presentation) is a 144-core, ultra low-power chip sold by [GreenArrays](http://www.greenarraychips.com/) programmed in Forth (colorForth, polyForth, ...).
 
-![Chuck on stage](chuck_on_stage.jpg)
+![Chuck on stage](images/chuck_on_stage.jpg)
 
 I got a chance to shake his hand and ask him about his plans for [etherForth](http://www.colorforth.com/ef.htm). Sadly, he said that it's essentially his personal project and he doesn't want to support it. GreenArrays has wonderful, well-supported tooling (running on a PC), but I wanted to play with a complete system hosted on the chip itself, and I wanted to see his code to study. He has [blogged about bits and pieces of it](http://www.colorforth.com/etherCode.htm), but I wanted to see the editor and compiler and complete video driver. Oh well, I'll have have fun trying to do it myself! Won't be freaking easy though...
 
-![Eval board](eval_board.jpg)
+![Eval board](images/eval_board.jpg)
 
 I first got a chance to use the GreenArrays GA144 a year or so ago. It's a wonderful chip! I think of it as essentially 144 tiny Forth inner interpreters in hardware. The easiest way to get started is to buy the [eval board from GreenArrays](http://www.greenarraychips.com/home/products/index.html). The arrayForth environment is quite unconventional and mind bending, but so much fun to learn and the documentation is excellent. If you can't afford the ($450) eval board (worth every penny), then you can [cobble together a minimal setup for about $60](http://www.greenarraychips.com/home/documents/budget.html). Or for the bargain price of $0, you can follow this series of blog posts and at least get to play with a software simulation I'll be putting together. It's quite a challenge to learn and you have to be willing to wrap your head around a lot of unconventional choices; suspend disbelief and eventually realize the beauty of colorForth and the hardware architecture. It's a mind blowing, fun journey.
 

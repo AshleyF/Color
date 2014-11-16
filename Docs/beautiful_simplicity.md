@@ -10,11 +10,11 @@ This is the third in a series:
 
 As much fun as hand packing instructions was in [the last post](programming_the_f18.md), that was _tedious_. Let's move on to colorForth.
 
-![Hello world](hello_world.png)
+![Hello world](images/hello_world.png)
 
 Don't worry too much about what the code above does (prints "colorForth rocks!"). It compiles to this:
 
-![Hello world assembly](hello_world_assembly.png)
+![Hello world assembly](images/hello_world_assembly.png)
 
 Isn't the source beautiful? So colorful! The colors are not merely syntax highlighting. They drive the semantics! They are chosen at author-time in a specialized editor. I'm [working on a little tool chain](http://github.com/AshleyF/Color) including such an editor, an assembler and hardware emulator. [Here's a demo](http://youtu.be/LJoRyxRcj4A)
 
@@ -39,7 +39,7 @@ If you're used to "regular" Forth then you probably think of the colors as merel
 
 As a Forth programmer, maybe you noticed that the `char` word above is missing a simicolon! It "falls through" to `shift`. Here's another example:
 
-![abs/max](abs_max.png)
+![abs/max](images/abs_max.png)
 
 There's no return (`;`) between them. You can have multiple entry points and exit points in definitions! There is a certain simplicity and power that comes from not having a compiling vs. immediate mode as in regular Forth. Immediate words are just yellow and can be anywhere. Red words can also be _anywhere_. They simply give names to the current address in the instruction stream. There is no colon (`:`) word and definitions don't necessarily end with a return (`;`). It's also common to have an early return rather than an `else`. It's a different way to program, even for a Forth.
 
@@ -85,15 +85,15 @@ At compile-time, white comments and blue format words are ignored. That's easy e
 
 Gray words are serializes as literal op code values. This means that all the assembler needs to do is pack them in the current slot and advance some pointers. The first example from the [last post](programming_the_f18.md):
 
-| Source            | Assembly                       |
-|-------------------|--------------------------------|
-| ![Echo](echo.png) | ![Echo assembly](echo_asm.png) |
+| Source                   | Assembly                              |
+|--------------------------|---------------------------------------|
+| ![Echo](images/echo.png) | ![Echo assembly](images/echo_asm.png) |
 
 Yellow tokens are executed immediately during compilation. A yellow number is pushed to the compile-time stack. Yellow words are looked up in the dictionary (a previous red definition) and an immediate call is made to this address. Presumably the definition is a macro doing useful compile-time work. For example, in the echo example above, packing the `push` and nops (`.`) setting up the for loop and the decision to use a micronext (`unext`) can be automated with yellow `for`/`next` words:
 
-| Source                 | Assembly                            |
-|------------------------|-------------------------------------|
-| ![Echo I/O](echo2.png) | ![Echo I/O assembly](echo_asm.png) |
+| Source                        | Assembly                                  |
+|-------------------------------|-------------------------------------------|
+| ![Echo I/O](images/echo2.png) | ![Echo I/O assembly](images/echo_asm.png) |
 
 Red words don't emit any code. They just add an entry to the dictionary; mapping the name to the current address to which we're compiling code.
 
@@ -101,15 +101,15 @@ Green tokens are compiled to be executed later at run-time. A green _number_ com
 
 The second sample from [last post](programming_the_f18.md) looks much better written in colorForth:
 
-| Source                            | Assembly                              |
-|-----------------------------------|---------------------------------------|
-| ![Echo I/O infinite](echo_io.png) | ![Echo I/O assembly](echo_io_asm.png) |
+| Source                                   | Assembly                                     |
+|------------------------------------------|----------------------------------------------|
+| ![Echo I/O infinite](images/echo_io.png) | ![Echo I/O assembly](images/echo_io_asm.png) |
 
 The alphabet sample from [last post](programming_the_f18.md) is pretty in colorForth too:
 
-| Source                    | Assembly                               |
-|---------------------------|----------------------------------------|
-| ![Alphabet](alphabet.png) | ![Alphabet assembly](alphabet_asm.png) |
+| Source                           | Assembly                                      |
+|----------------------------------|-----------------------------------------------|
+| ![Alphabet](images/alphabet.png) | ![Alphabet assembly](images/alphabet_asm.png) |
 
 This is really all that the compiler does! It's an absolutely simple and completely straight forward top to bottom process. There's no magic. Any crazy optimizations are done by you. Macros can do more complicated things but these are written by you (or at least the source is available). They are just words like any other. Working with such a direct and simple system is a joy!
 
