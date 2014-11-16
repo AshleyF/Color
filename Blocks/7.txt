@@ -31,7 +31,7 @@ _bouncing _ball
  :draw _at _current _coordinaets _in _curren _color 
  	 3000000 color+ ^or ^!b _set _console _color _and _increment _(wrapping) 
  	 bally 7 `for ^2* `next ballx 1000000 ^or ^or ^!b _set _cursor _pos 
- 	 20 ^b! _draf _space _char _(with _background _color) `; 
+ 	 20 ^!b _draf _space _char _(with _background _color) `; 
  
  :go move bounce draw go 
  
