@@ -4,10 +4,10 @@ Color
 Having fun playing around with [colorForth](http://www.colorforth.com/cf.htm) and [GreenArrays](http://www.greenarraychips.com/) architecture. See the [demo](http://www.youtube.com/watch?v=LJoRyxRcj4A&feature=share&list=UUaahWOc75YojOsBjD0RxLlw) and [~~blog series~~](http://blogs.msdn.com/b/ashleyf/archive/tags/color/) - Blog series moved here to Github:
 
 * [Chuck Moore's Creations](Docs/chuck_moores_creations.md)
-* [Programming the F18](programming_the_f18.md)
-* [Beautiful Simplicity of colorForth](beautiful_simplicity.md)
-* [Multiply-step Instruction](multiply_step.md)
-* [Simple Variables](simple_variables.md)
+* [Programming the F18](Docs/programming_the_f18.md)
+* [Beautiful Simplicity of colorForth](Docs/beautiful_simplicity.md)
+* [Multiply-step Instruction](Docs/multiply_step.md)
+* [Simple Variables](Docs/simple_variables.md)
 
 ![Editor/Assembler](Docs/editor_assembler.png)
 
