@@ -11,6 +11,8 @@ Project("{F2A71F9B-5D33-465A-A702-920D77279786}") = "Editor", "Editor\Editor.fsp
 EndProject
 Project("{F2A71F9B-5D33-465A-A702-920D77279786}") = "Assembler", "Assembler\Assembler.fsproj", "{03A93172-1CD7-4229-9EAE-7EE3A8B05BCE}"
 EndProject
+Project("{F2A71F9B-5D33-465A-A702-920D77279786}") = "Synthesis", "Synthesis\Synthesis.fsproj", "{03A93172-1CD7-4229-9EAE-7EE3A8B05BCF}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -33,6 +35,10 @@ Global
 		{03A93172-1CD7-4229-9EAE-7EE3A8B05BCE}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{03A93172-1CD7-4229-9EAE-7EE3A8B05BCE}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{03A93172-1CD7-4229-9EAE-7EE3A8B05BCE}.Release|Any CPU.Build.0 = Release|Any CPU
+		{03A93172-1CD7-4229-9EAE-7EE3A8B05BCF}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{03A93172-1CD7-4229-9EAE-7EE3A8B05BCF}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{03A93172-1CD7-4229-9EAE-7EE3A8B05BCF}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{03A93172-1CD7-4229-9EAE-7EE3A8B05BCF}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
