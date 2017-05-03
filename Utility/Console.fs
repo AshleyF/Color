@@ -25,16 +25,16 @@ let x, y = ref 0, ref 0
 let consoleBeep () = Console.Beep()
 let consoleRead () = Console.ReadKey(true).KeyChar
 
-let consoleSetX x' = x := x'
-let consoleSetY y' = y := y'
+let consoleSetX x' = x := min (width - 1) (max 0 x')
+let consoleSetY y' = y := min (height - 1) (max 0 y')
 let consoleSetXY x' y' = consoleSetX x'; consoleSetY y'
 
-let consoleClear () = // Console.Clear()
+let consoleClear () =
     current := empty ()
     consoleSetXY 0 0
 
-let consoleWriteLine () = // Console.WriteLine()
-    min (height - 1) (!y + 1) |> consoleSetXY 0
+let consoleWriteLine () =
+    consoleSetXY 0 (!y + 1)
 
 let consoleWrite f b (s : string) =
     let write c =
@@ -44,7 +44,7 @@ let consoleWrite f b (s : string) =
     Seq.iter write s
 
 let consoleWriteStatus (s : string) =
-    height - 3 |> consoleSetXY 0 // Console.SetCursorPosition(0, height - 3)
+    height - 3 |> consoleSetXY 0
     consoleWrite Magenta Black (s.Substring(0, min (s.Length) (width - 1)))
 
 let consoleRefresh () =
@@ -68,5 +68,3 @@ let consoleRefresh () =
 let consoleInit () =
     Console.CursorVisible <- false
     Console.SetWindowSize(width, height)
-
-// TODO: ANSI commands for positioning and colors instead of .NET Console.* APIs on Linux
