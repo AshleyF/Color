@@ -13,7 +13,7 @@ let color = function
     | Green   -> ConsoleColor.Green
     | White   -> ConsoleColor.White
     | Blue    -> ConsoleColor.Blue
-    | Gray    -> ConsoleColor.DarkGray
+    | Gray    -> ConsoleColor.Gray
     | Magenta -> ConsoleColor.Magenta
     | Black   -> ConsoleColor.Black
 
