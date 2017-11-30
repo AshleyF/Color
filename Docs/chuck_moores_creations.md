@@ -53,7 +53,7 @@ type Machine (input: (unit -> int) array, output: (int -> unit) array) =
 
     let stk, rtn = Array.zeroCreate 8, Array.zeroCreate 8
     let move x d = (x + d) &&& 0b111
-    let push r v = rtn.[ri] <- r; ri <- move ri 1; r <- v
+    let pushr v = rtn.[ri] <- r; ri <- move ri 1; r <- v
     let popr () = ri <- move ri - 1; let x = r in r <- rtn.[ri]; x
     let pushs v = stk.[si] <- s; si <- move si 1; s <- t; t <- v
     let pops () = let x = t in t <- s; si <- move si - 1; s <- stk.[si]; x
