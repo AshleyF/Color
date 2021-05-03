@@ -3,7 +3,7 @@ _multiply-step _samples
  `load 
  
  :step ^dup 1 ^and `if ^drop ^over ^+ `else ^drop `then ^2/ `; 
- :* 7 `for ^2* `next ^over 	 7 `for step `next `; 
+ :* 7 `for ^2* `next ^over 7 `for step `next `; 
  
  :* ^a! 0 1f `for ^+* `next ^drop ^drop ^a `; _73 _inst, _139.9ns, _5 _cells 
  

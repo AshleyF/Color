@@ -28,8 +28,6 @@ _techniques
  :!x ^@p ^drop ^!p `; 
  :x 123 `; 
  
- :less `; 
- 
  :abs ^dup neg 
  :max less `if swap ^drop `; 
  

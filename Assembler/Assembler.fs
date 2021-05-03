@@ -225,6 +225,7 @@ watcher.Changed.Add(changed)
 watcher.Created.Add(changed)
 let rec watch () =
     watcher.WaitForChanged(WatcherChangeTypes.Changed ||| WatcherChangeTypes.Created) |> ignore
+    Thread.Sleep(100) // give time for save to complete
     let block = !assembleBlock
     assembleBlock := ""
     if block.Length > 0 then

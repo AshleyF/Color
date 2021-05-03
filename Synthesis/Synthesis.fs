@@ -93,8 +93,10 @@ let search strict max instructions examples =
 
 printfn "Synthesis"
 
-search true
-    6 [Not; Plus; And; Or; TwoStar; TwoSlash; Drop; Dup; Over; Push; Pop; Fetch; Store]
-    [(init 0 [] [1; 2]), [2; 1] 
-     (init 0 [] [5; 7]), [7; 5]]
+search
+    false // strictly exact stack or only top n-values required?
+    2 // max number of instructions
+    [Not; Plus; And; Or; TwoStar; TwoSlash; Drop; Dup; Over; Push; Pop; Fetch; Store] // instructions to try
+    [(init 0 [] [1; 2]), [1; 2; 1; 2] // examples (machine state -> stack)
+     (init 0 [] [5; 7]), [5; 7; 5; 7]] // e.g. 5 7 -> 5 7 5 7 "2dup" (finds: over over)
 |> Seq.iter (printfn "FOUND: %A")

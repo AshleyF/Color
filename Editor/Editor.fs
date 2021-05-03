@@ -1,4 +1,5 @@
 ﻿open System
+open System.Diagnostics
 open System.IO
 open System.Globalization
 open Devices
@@ -235,5 +236,6 @@ let main state =
     consoleInit ()
     let rec main' state = consoleRead () |> edit state |> render |> noMessage |> main'
     state |> render |> main'
+
 
 edit { Block = 1; Mode = Normal; Before = []; Current = None; After = []; Clipboard = []; Undo = None; Redo = None; Message = "Welcome to colorForth" } '1' |> main
