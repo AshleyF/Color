@@ -1,7 +1,5 @@
 ﻿open System
-open System.Diagnostics
 open System.IO
-open System.Globalization
 open Devices
 open Serdes
 open Console

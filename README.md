@@ -15,13 +15,22 @@ The assembler watches for changes to the block files saved by the editor. I leav
 
 ## Setup
 
-Everything is written in F# and uses solution (`.sln`) and project (`.fsproj`) files compatible with Visual Studio, Xamarin or plain xbuild. I personally have been using plain Vim (with the [excellent F# bindings](https://github.com/fsharp/fsharpbinding)). Here's setup steps for Ubuntu:
+Everything is written in F# and uses solution (`.sln`) and project (`.fsproj`) files compatible with Visual Studio or `dotnet build`. I personally have been using plain Vim (with the [excellent F# bindings](https://github.com/fsharp/fsharpbinding)). Here's setup steps for Ubuntu:
 
-**Install F#**
+**Install .NET Core**
 
-    sudo apt-get update
-    sudo apt-get install mono-complete
-    sudo apt-get install fsharp
+* Install the [.NET SDK](https://docs.microsoft.com/en-us/dotnet/core/install/linux-ubuntu). For example, for Ubuntu 21.04:
+
+```
+wget https://packages.microsoft.com/config/ubuntu/20.04/packages-microsoft-prod.deb -O packages-microsoft-prod.deb
+sudo dpkg -i packages-microsoft-prod.deb
+rm packages-microsoft-prod.deb
+
+sudo apt-get update
+sudo apt-get install -y apt-transport-https
+sudo apt-get update
+sudo apt-get install -y dotnet-sdk-5.0
+```
 
 **Pull down the project**
 
@@ -29,6 +38,12 @@ Everything is written in F# and uses solution (`.sln`) and project (`.fsproj`) f
 
 **Build**
 
-    xbuild Color.sln
+    dotnet build Color.sln
 
 Each project produces an executable (`Assembler.exe`, `Editor.exe`, `Machine.exe`) within `bin/`
+
+**Play!**
+
+The Editor edits block files (`/Blocks/*.blk`) while the Assembler waits for changes to block and assembles them (to block 0). Running the Machine executes block 0.
+
+The normal way of working is to run the Editor and Assembler at the same time (in separate tabs or tmux splits, etc.). Each time a block is saved (`s` in the editor), it's assembled. Then run the Machine to try it out.

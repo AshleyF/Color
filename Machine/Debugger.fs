@@ -66,12 +66,10 @@ let debugger p i slot a b t s si (stk : int array) r ri (rtn : int array) (ram :
                 consoleSetX (indent + ind)
                 sprintf "%08x" s.[x] |> consoleWrite (if x = i' && i <> i' then Yellow else White) (if i = x then Blue else Black)
             for x in 7 .. -1 .. 0 do disp 2  stk x si si'; disp 16 rtn x ri ri'; line ()
-        let displayTime () =
-            write Green "Time "; sprintf "%0.1fns" ((float time) / 10.) |> write White
         consoleClear ()
         write Red "Debug  "
         write Green "Instructions "; sprintf "%i  " instructions |> write White
-        displayTime ()
+        write Green "Time "; sprintf "%0.1fns" ((float time) / 10.) |> write White
         line2 ()
         instructions <- instructions + 1
         consoleSetX indent; display "P" p p'; space (); displayI (); line2 ()
