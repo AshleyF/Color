@@ -65,6 +65,4 @@ let consoleRefresh () =
     last := !current
     Console.SetCursorPosition(!x, !y)
 
-let consoleInit () =
-    Console.CursorVisible <- false
-    Console.SetWindowSize(width, height)
+let consoleInit () = Console.CursorVisible <- false
