@@ -19,7 +19,7 @@ Everything is written in F# and uses solution (`.sln`) and project (`.fsproj`) f
 
 **Install .NET Core**
 
-* Install the [.NET SDK](https://docs.microsoft.com/en-us/dotnet/core/install/linux-ubuntu). For example, for Ubuntu 21.04:
+* Install the [.NET SDK](https://docs.microsoft.com/en-us/dotnet/core/install/linux-ubuntu). For example, for _Ubuntu 21.04_ in particular:
 
 ```
 wget https://packages.microsoft.com/config/ubuntu/20.04/packages-microsoft-prod.deb -O packages-microsoft-prod.deb
@@ -44,6 +44,6 @@ Each project produces an executable (`Assembler.exe`, `Editor.exe`, `Machine.exe
 
 **Play!**
 
-The Editor edits block files (`/Blocks/*.blk`) while the Assembler waits for changes to block and assembles them (to block 0). Running the Machine executes block 0.
+The editor edits block files (`/Blocks/*.blk`) while the assembler waits for changes to blocks and assembles them (to block 0). Running the machine executes block 0.
 
-The normal way of working is to run the Editor and Assembler at the same time (in separate tabs or tmux splits, etc.). Each time a block is saved (`s` in the editor), it's assembled. Then run the Machine to try it out.
+The normal way of working is to run the `./Editor` and `./Assembler` at the same time (in separate tabs or tmux splits, etc.). Each time a block is saved (by pressing `s` in the editor), it's assembled. Then run the `./Machine` to try it out.
