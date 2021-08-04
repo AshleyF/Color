@@ -44,7 +44,7 @@ let consoleWrite f b (s : string) =
     Seq.iter write s
 
 let consoleWriteStatus (s : string) =
-    height - 3 |> consoleSetXY 0
+    consoleSetXY 0 height
     consoleWrite Magenta Black (s.Substring(0, min (s.Length) (width - 1)))
 
 let consoleRefresh () =

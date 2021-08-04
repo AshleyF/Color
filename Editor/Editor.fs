@@ -165,7 +165,9 @@ let rec edit state key =
     let once = (function Some (White, _) -> not !showComments | Some (Blue, _) -> not !showFormatting | _ -> false)
     let toDef = (function Some (Red, _) -> false | _ -> true)
     let toWord w = (function Some (_, w') -> w <> w' | _ -> true)
-    let find dir s = currentApply (fun (_, w) -> let s' = dir (toWord w) s in if s'.Current = s.Current then s' else consoleBeep (); s) s
+    let find dir s =
+        let compare w w' = match (w, w') with (Some (_, x), Some (_, y)) -> x = y | _ -> false
+        currentApply (fun (_, w) -> let s' = dir (toWord w) s in if compare s'.Current s.Current then s' else consoleBeep (); s) s
     let toggle v s = v := not !v; s
     let newline s = { s with Current = Some (Blue, "cr") } |> next |> tag Red
     let openLine s =
@@ -219,12 +221,13 @@ let rec edit state key =
         | Insert, ' ' -> validate state |> next
         | Insert, '\b' -> del state
         |      _, k when int k = 0 -> state // ignore
-        |      _, k when int k = 27 (* esc *) -> validate state |> normal
-        | Normal, k when int k = 18 (* ctrl-R *) -> redo state
-        | Insert, k when int k = 10 (* enter *) -> validate state |> next |> newline
-        | Insert, k when int k = 13 (* enter *) -> validate state |> next |> newline
-        | Insert, k when int k = 8  (* backspace *) -> del state
-        | Insert, k when int k = 9  (* tab *)   -> validate state |> next |> tag Blue |> input '.' |> next |> tag Green
+        |      _, k when int k = 27  (* esc *) -> validate state |> normal
+        | Normal, k when int k = 18  (* ctrl-R *) -> redo state
+        | Insert, k when int k = 10  (* enter *) -> validate state |> next |> newline
+        | Insert, k when int k = 13  (* enter *) -> validate state |> next |> newline
+        | Insert, k when int k = 8   (* backspace *) -> del state
+        | Insert, k when int k = 127 (* backspace *) -> del state
+        | Insert, k when int k = 9   (* tab *)   -> validate state |> next |> tag Blue |> input '.' |> next |> tag Green
         | Insert, k when Char.IsLower(k) || Char.IsDigit(k) || Char.IsSymbol(k) || Char.IsPunctuation(k) -> input k state |> validate
         |      _, k -> failwith (sprintf "Invalid key (%i)." (int k))
     with ex -> consoleBeep (); message state ex.Message
