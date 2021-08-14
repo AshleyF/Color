@@ -1,7 +1,7 @@
 Color
 =====
 
-Having fun playing around with [colorForth](http://www.colorforth.com/cf.htm) and [GreenArrays](http://www.greenarraychips.com/) architecture. See the [demo](http://www.youtube.com/watch?v=LJoRyxRcj4A&feature=share&list=UUaahWOc75YojOsBjD0RxLlw) and [~~blog series~~](http://blogs.msdn.com/b/ashleyf/archive/tags/color/) - Blog series moved here to Github:
+Having fun playing around with [colorForth](http://www.colorforth.com/cf.htm) and [GreenArrays](http://www.greenarraychips.com/) architecture. See the [demo](https://youtu.be/LYtQMmvgg6w) presented to the [Forth2020 Group](http://https://www.forth2020.org/) in AUG 2021 and [~~blog series~~](http://blogs.msdn.com/b/ashleyf/archive/tags/color/) - Blog series moved here to Github:
 
 * [Chuck Moore's Creations](Docs/chuck_moores_creations.md)
 * [Programming the F18](Docs/programming_the_f18.md)
