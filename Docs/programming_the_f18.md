@@ -104,7 +104,7 @@ It is _extremely_ common to break programs into many, many small routines. Aggre
 
 ## Encoding
 
-Since these instructions expect their operands on the stack, for the most part, they pack very tightly - four to an instruction cell. This tight packing would not be possible on a register machine! Several of the instructions _do_ have address operands. They are `(jump)`, `(call)`, `next`, `if` and -if. Each of these use the remaining slots of the instruction cell as an address. The address simply replaces the lower bits in P so that they form "pages" of memory within which you can transfer. That is, a slot 3 `(jump)` may not reach everywhere in RAM. Don't worry though. We'll get away from dealing with low-level issues like these once we start working in colorForth in future posts.
+Since these instructions expect their operands on the stack, for the most part, they pack very tightly - four to an instruction cell. This tight packing would not be possible on a register machine! Several of the instructions _do_ have address operands. They are `(jump)`, `(call)`, `next`, `if` and `-if`. Each of these use the remaining slots of the instruction cell as an address. The address simply replaces the lower bits in P so that they form "pages" of memory within which you can transfer. That is, a slot 3 `(jump)` may not reach everywhere in RAM. Don't worry though. We'll get away from dealing with low-level issues like these once we start working in colorForth in future posts.
 
 ## Example Program 1
 
